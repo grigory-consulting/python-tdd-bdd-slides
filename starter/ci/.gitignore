@@ -1,0 +1,19 @@
+# Berichte werden bei jedem Lauf neu erzeugt und gehoeren nicht ins Repository.
+# Die Pipeline holt sie sich als Artefakte, nicht aus dem Git-Baum.
+reports/
+
+# Coverage-Zwischenstaende
+.coverage
+.coverage.*
+
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+
+.approval_tests_temp/
+*.received.*
+htmlcov/
+.env
+.env.*
+.DS_Store

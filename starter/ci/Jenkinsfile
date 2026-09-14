@@ -1,0 +1,62 @@
+// Lab 8: Vier TODO-Platzhalter mit Kommandos und JUnit-Pfaden ersetzen.
+// Den vorbereiteten Stage- und Berichtsaufbau danach mit GitLab vergleichen.
+pipeline {
+
+    agent {
+        docker {
+            image 'python:3.12-slim'
+            args '-v $HOME/.cache/pip:/root/.cache/pip'
+        }
+    }
+
+    stages {
+
+        stage('Install') {
+            steps {
+                sh 'python -m pip install --upgrade pip'
+                sh 'pip install -r requirements.txt'
+                sh 'mkdir -p reports/behave'
+            }
+        }
+
+        stage('Unit tests (pytest)') {
+            steps {
+                sh 'TODO_PYTEST_COMMAND'
+            }
+            post {
+                always {
+                    junit 'TODO_PYTEST_XML'
+                }
+            }
+        }
+
+        stage('BDD tests (behave)') {
+            steps {
+                sh 'TODO_BEHAVE_COMMAND'
+            }
+            post {
+                always {
+                    junit 'TODO_BEHAVE_XML'
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            archiveArtifacts artifacts: 'reports/**/*.xml', fingerprint: true
+
+            recordCoverage(
+                tools: [[parser: 'COBERTURA', pattern: 'reports/coverage.xml']],
+                id: 'python-coverage',
+                name: 'Python Coverage',
+                sourceCodeRetention: 'LAST_BUILD',
+                qualityGates: [
+                    [threshold: 60.0, metric: 'LINE',   baseline: 'PROJECT', criticality: 'UNSTABLE'],
+                    [threshold: 50.0, metric: 'BRANCH', baseline: 'PROJECT', criticality: 'UNSTABLE']
+                ]
+            )
+
+        }
+    }
+}

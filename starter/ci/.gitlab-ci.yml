@@ -1,0 +1,35 @@
+# Lab 8: Vier TODO-Platzhalter mit Kommandos und JUnit-Pfaden ersetzen.
+default:
+  image: python:3.12
+  before_script:
+    - python -m pip install --upgrade pip
+    - pip install -r requirements.txt
+
+stages:
+  - test
+
+pytest:
+  stage: test
+  script:
+    - TODO_PYTEST_COMMAND
+  coverage: '/TOTAL.*? (100(?:\.0+)?\%|[1-9]?\d(?:\.\d+)?\%)$/'
+  artifacts:
+    when: always
+    paths:
+      - reports/
+    reports:
+      junit: TODO_PYTEST_XML
+      coverage_report:
+        coverage_format: cobertura
+        path: reports/coverage.xml
+
+behave:
+  stage: test
+  script:
+    - TODO_BEHAVE_COMMAND
+  artifacts:
+    when: always
+    paths:
+      - reports/behave/
+    reports:
+      junit: TODO_BEHAVE_XML
