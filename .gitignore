@@ -1,0 +1,9 @@
+.DS_Store
+.env
+.env.*
+*.mp3
+*.wav
+*.m4a
+*.ogg
+*.mp4
+tts/
