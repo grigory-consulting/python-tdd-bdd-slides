@@ -14,7 +14,7 @@ Das Repository herunterladen und **`index.html` im Browser öffnen**. Die Datei 
 |---|---|
 | Pfeil rechts / Leertaste | Nächste Einblendung oder Folie |
 | Pfeil links | Zurück |
-| `Esc` | Übersicht und Kapitelauswahl |
+| `Esc` | Übersicht: Folien unter ihrem Kapitel anzeigen und direkt anklicken |
 | `F` | Vollbild |
 | `S` | Sprechernotizen |
 

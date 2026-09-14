@@ -836,7 +836,8 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
   --code-dark-bg: #122238;
 }
 .reveal { font-weight: 400; }
-.reveal .slides > section { height: 720px; padding: 0; top: 0 !important; text-align: left; }
+.reveal .slides > section,
+.reveal .slides > section > section { height: 720px; padding: 0; top: 0 !important; text-align: left; }
 .reveal .slide-frame {
   height: 720px; padding: 44px 64px 46px; box-sizing: border-box;
   display: flex; flex-direction: column; gap: 24px;
@@ -1023,40 +1024,6 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
     transform: none !important; transition: none !important;
   }
 }
-
-/* Chapter shortcuts stay readable above the overview thumbnails. */
-.reveal .chapter-navigation {
-  position: absolute; z-index: 40; top: 24px; left: 24px; right: 24px;
-  max-width: 1120px; margin: 0 auto; padding: 20px; box-sizing: border-box;
-  background: #f4f7fb; border: 1px solid #d7e1eb; border-radius: 8px;
-  text-align: left; font: 16px/1.4 var(--r-main-font); color: #183b66;
-}
-.reveal .chapter-navigation[hidden] { display: none; }
-.reveal .chapter-navigation-label {
-  margin: 0 0 12px; font-size: 13px; font-weight: 650;
-  letter-spacing: 0.05em; text-transform: uppercase;
-}
-.reveal .chapter-navigation-list { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
-.reveal .chapter-navigation button {
-  padding: 14px 16px; border: 1px solid #ccd9e6; border-radius: 5px;
-  background: #fff; color: #183b66; font: inherit; text-align: left; cursor: pointer;
-}
-.reveal .chapter-navigation button span { display: block; }
-.reveal .chapter-navigation button span:first-child {
-  margin-bottom: 6px; font-size: 12px; color: #617086;
-}
-.reveal .chapter-navigation button span:last-child { font-weight: 650; }
-.reveal .chapter-navigation button:hover { border-color: #2459a6; background: #eaf0f6; }
-.reveal .chapter-navigation button[aria-current] { border-color: #183b66; background: #e4edf6; }
-.reveal .chapter-navigation button:focus-visible { outline: 2px solid #2459a6; outline-offset: 3px; }
-@media (max-width: 800px) {
-  .reveal .chapter-navigation { top: 12px; left: 12px; right: 12px; padding: 14px; }
-  .reveal .chapter-navigation-list { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
-  .reveal .chapter-navigation button { padding: 10px 12px; font-size: 14px; }
-}
-@media print {
-  .reveal .chapter-navigation { display: none !important; }
-}
 </style>
 <style>
 /* --- Slides Extended constructs rendered for reveal.js --- */
@@ -1173,6 +1140,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <aside class="notes"><p>Planzeit: 2 Minuten (davon Übung/Gespräch: 0 Minuten; bereits enthalten). Tag 1.</p>
 <p>Tag 1 umfasst Teil I und II, Tag 2 Teil III und IV. Den Zeitplan bei Bedarf in agenda.md zeigen. Aufgaben stehen in LABS.md und in den jeweiligen Lab-Ordnern.</p>
 </aside></section>
+<section>
 <section data-background-color="#183b66" class="chapter">
 <div class="slide-frame"><header class="slide-heading"><h2><span class="chapter-label">Teil I · </span><span class="chapter-title">Testgetrieben entwickeln</span></h2></header><div class="slide-body">
 <p>Wir entwickeln die Rabattfunktion: einen Test schreiben, den Fall implementieren und den Code verbessern.</p>
@@ -1970,6 +1938,8 @@ def _to_cents(betrag):
 <aside class="notes"><p>Planzeit: 1 Minute (davon Übung/Gespräch: 0 Minuten; bereits enthalten). Tag 1.</p>
 <p>Kurz besprechen, welcher Schritt beim eigenen Arbeiten am schwersten fiel. Die genannte Funktion aus dem eigenen Projekt für den folgenden Abschnitt zu bestehendem Code notieren.</p>
 </aside></section>
+</section>
+<section>
 <section data-background-color="#183b66" class="chapter">
 <div class="slide-frame"><header class="slide-heading"><h2><span class="chapter-label">Teil II · </span><span class="chapter-title">Abhängigkeiten und bestehender Code</span></h2></header><div class="slide-body">
 <p>In den Tests ersetzen wir externe Dienste, untersuchen ein altes Modul und testen die Datenbankanbindung.</p>
@@ -2567,6 +2537,8 @@ def test_kostenlos():
 <aside class="notes"><p>Planzeit: 10 Minuten (davon Übung/Gespräch: 0 Minuten; bereits enthalten). Tag 1.</p>
 <p>Die fünf Themen anhand der geschriebenen Tests wiederholen. Offene Fragen für Tag 2 festhalten. Den Teilnehmer eine Technik auswählen lassen, die im eigenen Projekt unmittelbar helfen könnte.</p>
 </aside></section>
+</section>
+<section>
 <section data-background-color="#183b66" class="chapter">
 <div class="slide-frame"><header class="slide-heading"><h2><span class="chapter-label">Teil III · </span><span class="chapter-title">Anforderungen mit Beispielen klären</span></h2></header><div class="slide-body">
 <p>Wir formulieren die Coupon-Regel in Gherkin und setzen sie mit behave und pytest um.</p>
@@ -3360,6 +3332,8 @@ def rabatt(ergebnis, amount):
 <aside class="notes"><p>Planzeit: 10 Minuten (davon Übung/Gespräch: 0 Minuten; bereits enthalten). Tag 2.</p>
 <p>Zehn Minuten für die Auswertung von Lab 6. Das neue Coupon-Szenario vom ersten Fehlschlag bis zum Refactoring verfolgen. Eine passende Regel aus dem eigenen Projekt für das Abschlussgespräch notieren.</p>
 </aside></section>
+</section>
+<section>
 <section data-background-color="#183b66" class="chapter">
 <div class="slide-frame"><header class="slide-heading"><h2><span class="chapter-label">Teil IV · </span><span class="chapter-title">Tests im täglichen Einsatz</span></h2></header><div class="slide-body">
 <p>Szenarien auswählen, Ressourcen verwalten, Berichte erzeugen und Tests in der CI ausführen.</p>
@@ -4137,6 +4111,7 @@ verify_in_order:
 <aside class="notes"><p>Planzeit: 10 Minuten (davon Übung/Gespräch: 0 Minuten; bereits enthalten). Tag 2.</p>
 <p>Offene Fragen besprechen und noch ungeklärte Punkte notieren. Falls keine Fragen mehr bestehen, den geplanten ersten Schritt für die kommende Woche konkretisieren.</p>
 </aside></section>
+</section>
 </div></div>
 <script>/*!
  * reveal.js 5.2.0
@@ -4162,6 +4137,7 @@ const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 Reveal.initialize({
   width: 1280, height: 720, margin: 0.015, minScale: 0.2, maxScale: 2.0,
   center: false, hash: true, slideNumber: 'c/t', controls: true, progress: true,
+  navigationMode: 'linear', scrollActivationWidth: null,
   controlsTutorial: false,
   transition: reducedMotion.matches ? 'none' : 'fade',
   transitionSpeed: 'fast', backgroundTransition: reducedMotion.matches ? 'none' : 'fade',
@@ -4172,59 +4148,6 @@ Reveal.initialize({
     transition: event.matches ? 'none' : 'fade',
     backgroundTransition: event.matches ? 'none' : 'fade'
   }));
-  // Keep the linear slide order and offer chapter jumps in the overview.
-  const chapters = Reveal.getSlides()
-    .filter(slide => slide.classList.contains('chapter'));
-  const navigation = document.createElement('nav');
-  navigation.className = 'chapter-navigation';
-  navigation.setAttribute('aria-label', 'Kapitel auswählen');
-  navigation.hidden = true;
-  const label = document.createElement('p');
-  label.className = 'chapter-navigation-label';
-  label.textContent = 'Kapitel';
-  navigation.append(label);
-  const list = document.createElement('div');
-  list.className = 'chapter-navigation-list';
-  navigation.append(list);
-  const buttons = chapters.map(slide => {
-    const button = document.createElement('button');
-    button.type = 'button';
-    for (const selector of ['.chapter-label', '.chapter-title']) {
-      const text = document.createElement('span');
-      text.textContent = slide.querySelector(selector).textContent.replace(/ · $/, '');
-      button.append(text);
-    }
-    button.addEventListener('click', () => {
-      Reveal.slide(Reveal.getIndices(slide).h);
-      Reveal.toggleOverview(false);
-    });
-    // Let native button activation handle Enter and Space, without advancing slides.
-    button.addEventListener('keydown', event => {
-      if (event.key === 'Enter' || event.key === ' ') event.stopPropagation();
-    });
-    list.append(button);
-    return button;
-  });
-  Reveal.getRevealElement().append(navigation);
-  const updateCurrentChapter = () => {
-    const current = Reveal.getIndices().h;
-    const active = chapters.filter(slide => Reveal.getIndices(slide).h <= current).pop();
-    buttons.forEach((button, index) => {
-      if (chapters[index] === active) button.setAttribute('aria-current', 'location');
-      else button.removeAttribute('aria-current');
-    });
-  };
-  Reveal.on('overviewshown', () => {
-    navigation.hidden = false;
-    updateCurrentChapter();
-    (buttons.find(button => button.hasAttribute('aria-current')) || buttons[0])
-      ?.focus({ preventScroll: true });
-  });
-  Reveal.on('slidechanged', updateCurrentChapter);
-  Reveal.on('overviewhidden', () => {
-    if (navigation.contains(document.activeElement)) document.activeElement.blur();
-    navigation.hidden = true;
-  });
 });
 </script>
 </body>
