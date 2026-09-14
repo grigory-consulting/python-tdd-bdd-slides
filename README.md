@@ -18,12 +18,6 @@ Das Repository herunterladen und **`index.html` im Browser öffnen**. Die Datei 
 | `F` | Vollbild |
 | `S` | Sprechernotizen |
 
-## Anleitung öffnen
-
-[Schritt-für-Schritt-Anleitung im Browser](https://grigory-consulting.github.io/python-tdd-bdd-slides/anleitung/ANLEITUNG.html) · [Markdown](anleitung/ANLEITUNG.md)
-
-Neu am Ende: [Agentische Entwicklung mit BDD und TDD](https://grigory-consulting.github.io/python-tdd-bdd-slides/anleitung/ANLEITUNG.html#agentische-entwicklung-mit-bdd-und-tdd) – ein eigenständiges Beispiel mit konkreten Agentenaufträgen und roten/grünen Testläufen.
-
 ## Starter für die Übungen
 
 - [Abhängigkeiten im Test ersetzen](starter/testdoubles/) – Startprojekt mit 17 fertigen Rabatt-Tests und 13 roten Aufgaben-Tests zu Fake, Mock, `patch` und `monkeypatch`.
