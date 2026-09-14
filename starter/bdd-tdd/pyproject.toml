@@ -1,0 +1,15 @@
+# Kursprojekt "Rabattshop" (IAD PR414, Python TDD und BDD)
+#
+# Es gibt bewusst keinen [build-system]-Abschnitt: das Paket wird nicht
+# installiert. pytest legt src/ ueber pythonpath auf sys.path, deshalb
+# funktioniert "import shop" in jedem Test.
+
+[project]
+name = "shop"
+version = "0.1.0"
+description = "Kursprojekt Rabattshop"
+requires-python = ">=3.10"
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]

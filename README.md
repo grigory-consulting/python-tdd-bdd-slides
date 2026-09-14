@@ -18,9 +18,10 @@ Das Repository herunterladen und **`index.html` im Browser öffnen**. Die Datei 
 | `F` | Vollbild |
 | `S` | Sprechernotizen |
 
-## Starter für die Übung
+## Starter für die Übungen
 
-[SQLite, Coverage und geteilte Testdaten](starter/sqlite-coverage/) – Startprojekt mit 77 Tests, einer separaten Fixture-Demo und einer Anleitung zur Einrichtung.
+- [SQLite, Coverage und geteilte Testdaten](starter/sqlite-coverage/) – Startprojekt mit 77 Tests, einer separaten Fixture-Demo und einer Anleitung zur Einrichtung.
+- [Eine neue Regel mit BDD und TDD entwickeln](starter/bdd-tdd/) – Startprojekt mit 79 Tests, vorbereitetem Feature-Ordner und einer Anleitung zur Einrichtung.
 
 ## Drittanbieter
 
