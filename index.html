@@ -3856,46 +3856,72 @@ stage('BDD tests') {
 <aside class="notes"><p>Planzeit: 6 Minuten (davon Übung/Gespräch: 0 Minuten; bereits enthalten). Tag 2.</p>
 <p>Nach der CI-Übung den Blick auf die Testauswahl lenken: Mehr automatisch gestartete Tests sind nicht automatisch bessere Absicherung. Die Rabattfälle unterscheiden sich von einem vollständigen Checkout mit Oberfläche, Backend und Datenbank. Wichtige Nutzerabläufe brauchen zusätzlich End-to-End-Tests, Varianten bleiben möglichst auf kleineren Ebenen. Findet ein End-to-End-Test einen Fehler, versuchen wir ihn durch einen kleineren Test zu reproduzieren. Für die Verteilung gibt es keine allgemeingültigen Prozentanteile.</p>
 </aside></section>
-<section class="code-slide code-split-wide">
-<div class="slide-frame"><header class="slide-heading"><h2>Verhalten statt Implementierung</h2></header><div class="slide-body"><pre><code class="language-python"># Vorher
-def payable_total(customer_type, subtotal):
-    rabatt = calculate_discount(customer_type, subtotal)
-    return subtotal - rabatt
+<section>
+<div class="slide-frame"><header class="slide-heading"><h2>Gleicher Zahlbetrag, anderer interner Ablauf</h2></header><div class="slide-body">
+<p>Bei <code>coupon=None</code> gibt <code>_apply_coupon</code> den Betrag unverändert zurück. Diesen Aufruf können wir überspringen.</p>
+<div class="refactoring-comparison">
+<div class="fragment seminar-step" data-fragment-index="0">
+<p><strong>Vorher: Helfer immer aufrufen</strong></p>
+<pre><code class="language-python">def payable_total(
+    customer_type, subtotal, *, coupon=None
+):
+    total = subtotal - calculate_discount(
+        customer_type, subtotal
+    )
+    return _apply_coupon(total, coupon)
+</code></pre>
+</div>
+<div class="fragment seminar-step" data-fragment-index="1">
+<p><strong>Nachher: Ohne Coupon direkt zurückgeben</strong></p>
+<pre><code class="language-python">def payable_total(
+    customer_type, subtotal, *, coupon=None
+):
+    total = subtotal - calculate_discount(
+        customer_type, subtotal
+    )
+    if coupon is None:
+        return total
+    return _apply_coupon(total, coupon)
+</code></pre>
+</div>
+</div>
+<p class="fragment seminar-step" data-fragment-index="2"><strong>Beide Fassungen liefern für einen VIP-Kunden mit 100,00 € ohne Coupon genau 90,00 €.</strong> Der interne Aufruf entfällt; die Rabattregel bleibt gleich.</p>
 
-# Nachher: lokale Variable entfernt (Inline Variable)
-def payable_total(customer_type, subtotal):
-    return subtotal - calculate_discount(customer_type, subtotal)
-
-# Derselbe Test gilt für beide Implementierungen
-def test_zahlbetrag_vip():
-    assert payable_total("vip", Decimal("100.00")) == Decimal("90.00")
-</code></pre><div class="code-commentary">
-
-<p class="fragment seminar-step" data-fragment-index="0">Der Test beschreibt den <strong>Zahlbetrag</strong>. Ob die Berechnung eine lokale Variable verwendet, ist dafür unerheblich.</p>
-
-</div></div><footer class="slide-sources fragment seminar-fade" data-fragment-index="0"><p class="tiny muted"><a href="https://testing.googleblog.com/2013/08/testing-on-toilet-test-behavior-not.html">Verhalten statt Implementierung testen</a></p></footer></div>
+</div><footer class="slide-sources fragment seminar-fade" data-fragment-index="2"><p class="tiny muted"><a href="https://testing.googleblog.com/2013/08/testing-on-toilet-test-behavior-not.html">Verhalten statt Implementierung testen</a></p></footer></div>
 <aside class="notes"><p>Planzeit: 4 Minuten (davon Übung/Gespräch: 0 Minuten; bereits enthalten). Tag 2.</p>
-<p>Eigene Übertragung des Prinzips auf den bereits bekannten Rabattcode, vor Einführung der Coupons. Beide Alternativen einzeln ausführen; Decimal und calculate_discount wie zuvor importieren. Inline Variable ist ein kleines Refactoring; die lokale Variable kann auch sinnvoll bleiben, wenn ihr Name das Verständnis verbessert. Interne Details können relevant sein, wenn sie selbst Teil der Anforderung sind, etwa die Vermeidung eines Datenbankzugriffs durch einen Cache.</p>
+<p>Das Beispiel verwendet shop.discount aus dem Kursprojekt einschließlich der Coupon-Regel. Beide Varianten ersetzen nur payable_total; calculate_discount und _apply_coupon bleiben erhalten. Der Helfer gibt bei coupon=None bereits unverändert total zurück. Die zusätzliche frühe Rückgabe erhält daher auch Validierung, Rundung und Coupon-Verhalten. Vor der nächsten Folie fragen, ob ein vorhandener Test nach diesem Umbau rot werden dürfte. Gemeint sind Tests der öffentlichen Rabatt- und Coupon-Regeln, keine explizite Vorgabe zur Zahl interner Aufrufe.</p>
 </aside></section>
-<section class="code-slide code-split">
-<div class="slide-frame"><header class="slide-heading"><h2>Wenn ein Test nur den Code wiederholt</h2></header><div class="slide-body"><pre><code class="language-text"># Produktionscode
-def process(w):
-    firstPart.process(w)
-    secondPart.process(w)
+<section>
+<div class="slide-frame"><header class="slide-heading"><h2>Die Aufrufprüfung macht den Test unnötig rot</h2></header><div class="slide-body">
+<p>Beide Tests prüfen 90,00 €. Nur links wird zusätzlich ein Helferaufruf verlangt.</p>
+<div class="refactoring-comparison">
+<div class="fragment seminar-step" data-fragment-index="0">
+<p><strong>An den Helferaufruf gekoppelt</strong></p>
+<pre><code class="language-python">with patch.object(
+    discount, "_apply_coupon",
+    wraps=discount._apply_coupon
+) as helper:
+    total = discount.payable_total(
+        "vip", Decimal("100.00"))
+    assert total == Decimal("90.00")
+    helper.assert_called_once()
+</code></pre>
+<p>Vorher <strong>grün</strong>, nachher <strong>rot</strong>: <strong>0 statt 1</strong> Aufruf.</p>
+</div>
+<div class="fragment seminar-step" data-fragment-index="1">
+<p><strong>An der Rabattregel orientiert</strong></p>
+<pre><code class="language-python">total = discount.payable_total(
+    "vip", Decimal("100.00"))
+assert total == Decimal("90.00")
+</code></pre>
+<p>Vorher <strong>grün</strong>, nachher <strong>grün</strong>: weiterhin <strong>90,00 €</strong>.</p>
+</div>
+</div>
+<p class="fragment seminar-step" data-fragment-index="2"><strong>Der Helferaufruf ist keine Anforderung.</strong> Seine Prüfung entfällt; der Test auf den Zahlbetrag bleibt.</p>
 
-# Testcode
-verify_in_order:
-    was_called firstPart.process(w)
-    was_called secondPart.process(w)
-</code></pre><div class="code-commentary">
-<p class="fragment seminar-step" data-fragment-index="0"><strong>Pseudocode:</strong></p>
-
-<p class="fragment seminar-step" data-fragment-index="1"><strong>Wenn die Aufrufreihenfolge keine Anforderung ist</strong>, schreibt dieser Test nur die Implementierung fest. Er scheitert dann auch bei einem zulässigen Umbau.</p>
-<p class="fragment seminar-step" data-fragment-index="2">Formulieren Sie die Erwartung stattdessen aus der Anforderung. Ein Test ohne zusätzliche Aussage sollte überarbeitet oder entfernt werden.</p>
-
-</div></div><footer class="slide-sources fragment seminar-fade" data-fragment-index="2"><p class="tiny muted">Quelle: <a href="https://testing.googleblog.com/2015/01/testing-on-toilet-change-detector-tests.html">Google Testing Blog, Change-Detector Tests Considered Harmful</a></p></footer></div>
+</div><footer class="slide-sources fragment seminar-fade" data-fragment-index="2"><p class="tiny muted">Quelle: <a href="https://testing.googleblog.com/2015/01/testing-on-toilet-change-detector-tests.html">Google Testing Blog, Change-Detector Tests Considered Harmful</a></p></footer></div>
 <aside class="notes"><p>Planzeit: 3 Minuten (davon Übung/Gespräch: 0 Minuten; bereits enthalten). Tag 2.</p>
-<p>Nach Tests suchen, bei denen eine Codeänderung immer dieselbe mechanische Änderung an der Erwartung verlangt. Gemeinsam formulieren, welche unabhängige fachliche Aussage stattdessen geprüft werden könnte.</p>
+<p>Imports für beide Testausschnitte: from decimal import Decimal; from shop import discount; links zusätzlich from unittest.mock import patch. Jeden Ausschnitt in eine eigene Testfunktion setzen. wraps führt die echte Hilfsfunktion aus und zeichnet ihre Aufrufe auf; es ersetzt das Rechenergebnis nicht durch einen vorgegebenen Wert. Vor dem Refactoring bestehen beide Tests. Danach besteht die Betragsprüfung in beiden, aber assert_called_once scheitert mit Called 0 times. Nicht die Erwartung auf null Aufrufe ändern: Das würde erneut einen internen Ablauf festschreiben. Die Aufrufprüfung entfällt, die fachliche Assertion bleibt. Interaktionen prüfen wir weiterhin, wenn sie selbst verlangt sind, etwa genau eine Bestätigungsmail pro Bestellung. Der ausgefallene Coupon-Helferaufruf bei fehlendem Coupon ist keine solche Anforderung.</p>
 </aside></section>
 <section class="table-slide">
 <div class="slide-frame"><header class="slide-heading"><h2>Fragile Tests: unnötige Abhängigkeiten erkennen</h2></header><div class="slide-body">
@@ -3930,7 +3956,7 @@ verify_in_order:
 
 </div><footer class="slide-sources fragment seminar-fade" data-fragment-index="4"><p class="tiny muted">Quelle: <a href="http://xunitpatterns.com/Fragile%20Test.html">xUnit Test Patterns · Fragile Test</a></p></footer></div>
 <aside class="notes"><p>Planzeit: 3 Minuten (davon Übung/Gespräch: 0 Minuten; bereits enthalten). Tag 2.</p>
-<p>Ein roter Test nach einer beabsichtigten Verhaltensänderung kann richtig sein. Fragilität liegt bei einer unnötigen Abhängigkeit vor. Die beiden vorangehenden Beispiele zeigen interne Struktur und Aufrufreihenfolge. Overspecified Software bezeichnet Tests, die zu viel von der Implementierung vorschreiben. Beim Datum an die feste Uhr aus Teil II erinnern; bei gemeinsamen Daten an eine frische Fixture pro Szenario.</p>
+<p>Ein roter Test nach einer beabsichtigten Verhaltensänderung kann richtig sein. Fragilität liegt bei einer unnötigen Abhängigkeit vor. Das vorangehende Beispiel zeigt eine unnötige Vorgabe zur Zahl interner Helferaufrufe. Overspecified Software bezeichnet Tests, die zu viel von der Implementierung vorschreiben. Beim Datum an die feste Uhr aus Teil II erinnern; bei gemeinsamen Daten an eine frische Fixture pro Szenario.</p>
 </aside></section>
 <section class="table-slide">
 <div class="slide-frame"><header class="slide-heading"><h2>Test Smells: vom Symptom zur Verbesserung</h2></header><div class="slide-body">
