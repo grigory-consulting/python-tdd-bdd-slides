@@ -18,7 +18,9 @@ Das Repository herunterladen und **`index.html` im Browser öffnen**. Die Datei 
 | `F` | Vollbild |
 | `S` | Sprechernotizen |
 
-Dieses Repository enthält ausschließlich die Präsentation ohne Audio und die zugehörigen Nutzungshinweise. Übungen, Musterlösungen und Audioaufnahmen sind nicht enthalten.
+## Starter für die Übung
+
+[SQLite, Coverage und geteilte Testdaten](starter/sqlite-coverage/) – Startprojekt mit 77 Tests, einer separaten Fixture-Demo und einer Anleitung zur Einrichtung.
 
 ## Drittanbieter
 

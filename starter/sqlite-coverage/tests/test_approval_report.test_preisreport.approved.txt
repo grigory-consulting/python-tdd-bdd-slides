@@ -1,0 +1,16 @@
+Preisreport (legacy_pricing.calculate_price)
+===========================================
+
+Fall                      | Kunde   | Coupon   | Region | Preis
+--------------------------+---------+----------+--------+---------
+zwei Artikel je 10.00     | regular | -        | DE     |   23.80
+ein Buch 10.00            | regular | -        | DE     |   11.07
+VIP, Artikel 100.00       | vip     | -        | DE     |  107.10
+Mitarbeitende, 100.00     | staff   | -        | DE     |   59.50
+Buch mit SAVE20           | regular | SAVE20   | DE     |    0.00
+VIP mit SAVE20            | vip     | SAVE20   | DE     |   83.30
+FREESHIP auf 20.00        | regular | FREESHIP | DE     |   17.86
+Schweiz                   | regular | -        | CH     |   21.62
+USA                       | regular | -        | US     |   20.00
+unbekannte Region XX      | regular | -        | XX     |   23.80
+leerer Warenkorb          | regular | -        | DE     |    0.00
