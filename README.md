@@ -20,6 +20,7 @@ Das Repository herunterladen und **`index.html` im Browser öffnen**. Die Datei 
 
 ## Starter für die Übungen
 
+- [Abhängigkeiten im Test ersetzen](starter/testdoubles/) – Startprojekt mit 17 fertigen Rabatt-Tests und 13 roten Aufgaben-Tests zu Fake, Mock, `patch` und `monkeypatch`.
 - [SQLite, Coverage und geteilte Testdaten](starter/sqlite-coverage/) – Startprojekt mit 77 Tests, einer separaten Fixture-Demo und einer Anleitung zur Einrichtung.
 - [Eine neue Regel mit BDD und TDD entwickeln](starter/bdd-tdd/) – Startprojekt mit 79 Tests, vorbereitetem Feature-Ordner und einer Anleitung zur Einrichtung.
 - [Tests und Berichte in CI ausführen](starter/ci/) – Startprojekt mit 88 Tests, BDD-Szenarien, Berichtprüfung und Vorlagen für GitLab und Jenkins.
