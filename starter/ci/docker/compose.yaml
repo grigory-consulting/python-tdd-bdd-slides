@@ -1,0 +1,97 @@
+name: tdd-bdd-classroom
+
+x-tools: &tools
+  image: tdd-bdd-classroom-tools:local
+  build: ./tools
+
+services:
+  init:
+    <<: *tools
+    command: init
+    volumes:
+      - setup_state:/state
+
+  gitlab:
+    image: gitlab/gitlab-ce@sha256:f63df4c43029fe91db370609c0b40a1e3585cebd06e3e9637d93a9a3030eb86e
+    platform: linux/amd64
+    hostname: gitlab
+    shm_size: 256m
+    depends_on:
+      init:
+        condition: service_completed_successfully
+    environment:
+      GITLAB_OMNIBUS_CONFIG: |
+        external_url 'http://127.0.0.1:${CI_GITLAB_PORT:-18781}'
+        nginx['listen_port'] = 18781
+        gitlab_rails['initial_root_password'] = File.read('/state/gitlab-password').strip
+        gitlab_rails['gitlab_email_enabled'] = false
+        gitlab_rails['gitlab_signup_enabled'] = false
+        gitlab_rails['usage_ping_enabled'] = false
+        letsencrypt['enable'] = false
+        prometheus_monitoring['enable'] = false
+        registry['enable'] = false
+        gitlab_kas['enable'] = false
+        puma['worker_processes'] = 2
+        puma['min_threads'] = 2
+        puma['max_threads'] = 2
+        sidekiq['concurrency'] = 5
+        postgresql['shared_buffers'] = '128MB'
+    ports:
+      - "127.0.0.1:${CI_GITLAB_PORT:-18781}:18781"
+    volumes:
+      - setup_state:/state:ro
+      - gitlab_config:/etc/gitlab
+      - gitlab_logs:/var/log/gitlab
+      - gitlab_data:/var/opt/gitlab
+    networks: [ci]
+
+  jenkins:
+    build: ./jenkins
+    image: tdd-bdd-classroom-jenkins:local
+    user: root
+    depends_on:
+      init:
+        condition: service_completed_successfully
+    environment:
+      JAVA_OPTS: -Xmx1536m -Djenkins.install.runSetupWizard=false
+      SEMINAR_JENKINS_URL: http://127.0.0.1:${CI_JENKINS_PORT:-18780}/
+    ports:
+      - "127.0.0.1:${CI_JENKINS_PORT:-18780}:8080"
+    volumes:
+      - setup_state:/state:ro
+      - jenkins_home:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks: [ci]
+
+  runner:
+    image: gitlab/gitlab-runner@sha256:af0325804248aee217e055e753add77ccaaba6c8f5e2143b01108fd401165ef3
+    volumes:
+      - runner_config:/etc/gitlab-runner
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks: [ci]
+
+  setup:
+    <<: *tools
+    profiles: [tools]
+    environment:
+      CI_PROJECT: ${COMPOSE_PROJECT_NAME:-tdd-bdd-classroom}
+      CI_NETWORK: ${COMPOSE_PROJECT_NAME:-tdd-bdd-classroom}-ci
+      CI_GITLAB_PORT: ${CI_GITLAB_PORT:-18781}
+      CI_JENKINS_PORT: ${CI_JENKINS_PORT:-18780}
+    volumes:
+      - ..:/source:ro
+      - setup_state:/state
+      - runner_config:/runner-config
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks: [ci]
+
+networks:
+  ci:
+    name: ${COMPOSE_PROJECT_NAME:-tdd-bdd-classroom}-ci
+volumes:
+  setup_state:
+  gitlab_config:
+  gitlab_logs:
+  gitlab_data:
+  jenkins_home:
+  runner_config:

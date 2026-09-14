@@ -5,7 +5,6 @@ pipeline {
     agent {
         docker {
             image 'python:3.12-slim'
-            args '-v $HOME/.cache/pip:/root/.cache/pip'
         }
     }
 
