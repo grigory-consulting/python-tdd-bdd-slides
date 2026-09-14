@@ -3335,327 +3335,272 @@ def rabatt(ergebnis, amount):
 </section>
 <section>
 <section data-background-color="#183b66" class="chapter">
-<div class="slide-frame"><header class="slide-heading"><h2><span class="chapter-label">Teil IV · </span><span class="chapter-title">Tests im täglichen Einsatz</span></h2></header><div class="slide-body">
-<p>Szenarien auswählen, Ressourcen verwalten, Berichte erzeugen und Tests in der CI ausführen.</p>
+<div class="slide-frame"><header class="slide-heading"><h2><span class="chapter-label">Teil IV · </span><span class="chapter-title">Tests ausführen und Ergebnisse nutzen</span></h2></header><div class="slide-body">
+<p>behave-Läufe vorbereiten, Tests in der CI ausführen und Fehler gezielt untersuchen.</p>
 </div></div>
-<aside class="notes"><p>Planzeit: 1 Minute (davon Übung/Gespräch: 0 Minuten; bereits enthalten). Tag 2.</p>
-<p>Die laufenden Szenarien werden nun ausgewählt, mit Ressourcen versorgt und in Berichte aufgenommen. Danach beide CI-Konfigurationen vervollständigen und die eigenen Tests besprechen.</p>
+<aside class="notes"><p>Planzeit: 1 Minuten (davon Übung/Gespräch: 0 Minuten; bereits enthalten). Tag 2.</p>
+<p>Teil III hat gezeigt, wie ein fachliches Beispiel zum ausführbaren Test wird. Jetzt geht es um den wiederholbaren Einsatz dieser Tests: Auswahl, Vorbereitung, Berichte, CI und Review.</p>
 </aside></section>
 <section>
-<div class="slide-frame"><header class="slide-heading"><h2>behave erweitern und CI einrichten</h2></header><div class="slide-body">
-<ul>
-<li><strong>Kontext und Konfiguration:</strong> Daten je Lauf, Feature und Szenario verwalten</li>
-<li class="fragment seminar-step" data-fragment-index="0"><strong>Tags und Fixtures:</strong> Szenarien auswählen und Ressourcen bereitstellen</li>
-<li class="fragment seminar-step" data-fragment-index="1"><strong>Berichte:</strong> Ergebnisse im Terminal und als JUnit-XML ausgeben</li>
-<li class="fragment seminar-step" data-fragment-index="2"><strong>GitLab und Jenkins:</strong> Tests ausführen, Fehler erkennen und Coverage anzeigen</li>
-<li class="fragment seminar-step" data-fragment-index="3"><strong>Testqualität:</strong> Eigene Tests prüfen und verbessern</li>
-</ul>
+<div class="slide-frame"><header class="slide-heading"><h2>Vom einzelnen Szenario zum täglichen Testlauf</h2></header><div class="slide-body">
+<ol>
+<li><strong>Auswählen:</strong> Welche Szenarien sollen laufen?</li>
+<li class="fragment seminar-step" data-fragment-index="0"><strong>Vorbereiten:</strong> Welche Daten und Ressourcen brauchen sie?</li>
+<li class="fragment seminar-step" data-fragment-index="1"><strong>Auswerten:</strong> Was ist bestanden, fehlgeschlagen oder übersprungen?</li>
+<li class="fragment seminar-step" data-fragment-index="2"><strong>Automatisieren:</strong> Wie laufen dieselben Tests in GitLab und Jenkins?</li>
+<li class="fragment seminar-step" data-fragment-index="3"><strong>Verbessern:</strong> Wie helfen die Tests bei Fehlern und Änderungen?</li>
+</ol>
 </div></div>
-<aside class="notes"><p>Planzeit: 1 Minute (davon Übung/Gespräch: 0 Minuten; bereits enthalten). Tag 2.</p>
-<p>Die Themen kurz ankündigen. GitLab und Jenkins gehören beide zum vereinbarten Kursumfang. Bei Zeitdruck die optionalen Vertiefungen auslassen; die Arbeit an beiden vorbereiteten Pipeline-Gerüsten bleibt erhalten.</p>
+<aside class="notes"><p>Planzeit: 1 Minuten (davon Übung/Gespräch: 0 Minuten; bereits enthalten). Tag 2.</p>
+<p>Den Ablauf an einer gespeicherten Bestellung erläutern: Szenario markieren, frische Datenbank bereitstellen, Ergebnis berichten und automatisch prüfen. Danach die Aussagekraft der eigenen Tests untersuchen.</p>
 </aside></section>
-<section class="figure-slide">
-<div class="slide-frame"><header class="slide-heading"><h2>Die Schichten von <code>context</code></h2></header><div class="slide-body">
-<div class="sx-figure" style="width:880px;max-width:100%;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 336" role="img" aria-labelledby="kontext-schichten-title kontext-schichten-desc">
-  <title id="kontext-schichten-title">Der Kontext als Stapel</title>
-  <desc id="kontext-schichten-desc">Vier gestapelte Schichten des behave-Kontexts: unten die bleibende Wurzelschicht testrun, darüber feature und rule, oben die hervorgehobene kurzlebigste Schicht scenario, die nach dem Szenario wieder entfernt wird.</desc>
-  <defs>
-    <marker id="kontext-arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
-      <polygon points="0 0, 8 3, 0 6" fill="#8593a8"/>
-    </marker>
-  </defs>
+<section class="table-slide">
+<div class="slide-frame"><header class="slide-heading"><h2>Mit Tags die passenden Szenarien auswählen</h2></header><div class="slide-body">
+<p>Die Szenarien sind bereits mit <code>@smoke</code>, <code>@staffel</code> oder <code>@wip</code> markiert.</p>
+<table>
+<thead>
+<tr>
+<th>Aufruf</th>
+<th>Welche Szenarien laufen?</th>
+</tr>
+</thead>
+<tbody>
+<tr class="fragment seminar-fade" data-fragment-index="0">
+<td><code>behave --tags="@smoke"</code></td>
+<td>die Smoke-Szenarien für eine schnelle Grundprüfung</td>
+</tr>
+<tr class="fragment seminar-fade" data-fragment-index="1">
+<td><code>behave --tags="@smoke or @staffel"</code></td>
+<td>Smoke-Szenarien und Staffel-Beispiele</td>
+</tr>
+<tr class="fragment seminar-fade" data-fragment-index="2">
+<td><code>behave --tags="(@smoke or @staffel) and not @wip"</code></td>
+<td>beide Gruppen, ohne unfertige Szenarien</td>
+</tr>
+</tbody>
+</table>
+<p class="fragment seminar-step" data-fragment-index="3"><strong>Ein Tag markiert nur. Erst der Filter wählt aus.</strong> Ein Szenario mit <code>@wip</code> wird ohne passenden Ausschluss ebenfalls ausgeführt.</p>
 
-  <!-- Richtungsanzeige links, ausserhalb des Stapels -->
-  <text x="64" y="32" fill="#8593a8" font-size="11" font-family="'Geist Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" text-anchor="middle" letter-spacing="0.14em">KURZLEBIGER</text>
-  <line x1="64" y1="296" x2="64" y2="48" stroke="#8593a8" stroke-width="1" marker-end="url(#kontext-arrow)"/>
-
-  <!-- Stapelgrund -->
-  <rect x="120" y="48" width="720" height="256" rx="8" fill="#ffffff"/>
-
-  <!-- Fokusschicht: scenario -->
-  <path d="M 120,112 V 56 Q 120,48 128,48 H 832 Q 840,48 840,56 V 112 Z" fill="rgba(36,89,166,0.08)"/>
-
-  <!-- Trennlinien -->
-  <line x1="120" y1="112" x2="840" y2="112" stroke="#2459a6" stroke-width="1.5"/>
-  <line x1="120" y1="176" x2="840" y2="176" stroke="rgba(24,59,102,0.12)" stroke-width="1"/>
-  <line x1="120" y1="240" x2="840" y2="240" stroke="rgba(24,59,102,0.12)" stroke-width="1"/>
-
-  <!-- Aussenkontur -->
-  <rect x="120" y="48" width="720" height="256" rx="8" fill="none" stroke="#183b66" stroke-width="1"/>
-
-  <!-- Schicht 3: scenario (Fokus) -->
-  <text x="144" y="88" fill="#8593a8" font-size="11" font-family="'Geist Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" letter-spacing="0.14em">L3</text>
-  <text x="208" y="88" fill="#2459a6" font-size="18" font-weight="600" font-family="'Geist Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">scenario</text>
-  <text x="816" y="88" fill="#5a6b82" font-size="13" font-family="'Geist Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" text-anchor="end">endet mit dem Szenario</text>
-
-  <!-- Schicht 2: rule -->
-  <text x="144" y="152" fill="#8593a8" font-size="11" font-family="'Geist Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" letter-spacing="0.14em">L2</text>
-  <text x="208" y="152" fill="#183b66" font-size="18" font-weight="600" font-family="'Geist Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">rule</text>
-  <text x="816" y="152" fill="#5a6b82" font-size="13" font-family="'Geist Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" text-anchor="end">endet mit der Regel</text>
-
-  <!-- Schicht 1: feature -->
-  <text x="144" y="216" fill="#8593a8" font-size="11" font-family="'Geist Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" letter-spacing="0.14em">L1</text>
-  <text x="208" y="216" fill="#183b66" font-size="18" font-weight="600" font-family="'Geist Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">feature</text>
-  <text x="816" y="216" fill="#5a6b82" font-size="13" font-family="'Geist Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" text-anchor="end">endet mit dem Feature</text>
-
-  <!-- Schicht 0: testrun -->
-  <text x="144" y="280" fill="#8593a8" font-size="11" font-family="'Geist Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" letter-spacing="0.14em">L0</text>
-  <text x="208" y="280" fill="#183b66" font-size="18" font-weight="600" font-family="'Geist Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">testrun</text>
-  <text x="816" y="280" fill="#5a6b82" font-size="13" font-family="'Geist Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" text-anchor="end">Wurzel, bleibt bestehen</text>
-</svg>
-</div>
-<p class="fragment seminar-step" data-fragment-index="0">behave legt Schichten für <strong>Lauf, Feature, Rule und Szenario</strong> an. Am Ende eines Bereichs entfernt es dessen Schicht wieder.</p>
-<p class="fragment seminar-step" data-fragment-index="1">Ein Attribut aus <code>before_scenario</code> ist deshalb nur für dieses Szenario gesetzt.</p>
-
-</div><footer class="slide-sources fragment seminar-fade" data-fragment-index="1"><p class="tiny muted">Quelle: <a href="https://behave.readthedocs.io/en/stable/api/">behave-Doku, API Reference</a></p></footer></div>
+</div><footer class="slide-sources fragment seminar-fade" data-fragment-index="3"><p class="tiny muted">Quelle: <a href="https://behave.readthedocs.io/en/stable/tag_expressions/">behave · Tag Expressions</a></p></footer></div>
 <aside class="notes"><p>Planzeit: 3 Minuten (davon Übung/Gespräch: 0 Minuten; bereits enthalten). Tag 2.</p>
-<p>Im Diagramm testrun, feature, rule und scenario zuordnen. Ein Szenario kann Werte der äußeren Schicht überdecken. Beim Entfernen seiner Schicht werden die äußeren Werte wieder sichtbar.</p>
-</aside></section>
-<section>
-<div class="slide-frame"><header class="slide-heading"><h2>Welche Kontextwerte sind verfügbar?</h2></header><div class="slide-body">
-<ul>
-<li><code>context.feature</code> steht innerhalb eines Features bereit, <code>context.scenario</code> innerhalb eines Szenarios.</li>
-<li class="fragment seminar-step" data-fragment-index="0">Mit <code>"feature" in context</code> prüfen Sie, ob ein Wert existiert.</li>
-<li class="fragment seminar-step" data-fragment-index="1"><code>del</code> kann einen Wert nur auf der Schicht entfernen, auf der er gesetzt wurde.</li>
-<li class="fragment seminar-step" data-fragment-index="2">Namen wie <code>feature</code>, <code>scenario</code>, <code>tags</code>, <code>table</code>, <code>text</code>, <code>failed</code> und <code>config</code> verwendet behave selbst.</li>
-<li class="fragment seminar-step" data-fragment-index="3">Belegte Namen nicht selbst setzen: Das kann <strong><code>ContextMaskWarning</code></strong> auslösen.</li>
-</ul>
-<p class="fragment seminar-step" data-fragment-index="4">Setzt ein Szenario einen eigenen gleichnamigen Wert, <strong>überdeckt</strong> es den Feature-Wert nur vorübergehend. Nach dem Szenario ist wieder der Feature-Wert sichtbar.</p>
-
-</div><footer class="slide-sources fragment seminar-fade" data-fragment-index="4"><p class="tiny muted">Quelle: <a href="https://behave.readthedocs.io/en/stable/api/">behave-Doku, API Reference</a></p></footer></div>
-<aside class="notes"><p>Planzeit: 2 Minuten (davon Übung/Gespräch: 0 Minuten; bereits enthalten). Tag 2.</p>
-<p>Die reservierten Namen zeigen. ContextMaskWarning kann auch auftreten, wenn behave einen zuvor gesetzten eigenen Wert überdeckt. Eigene Attribute so benennen, dass sie nicht mit table, text oder anderen behave-Namen kollidieren.</p>
-</aside></section>
-<section class="comparison">
-<div class="slide-frame"><header class="slide-heading"><h2>Aufrufparameter und Konfiguration</h2></header><div class="slide-body">
-<div class="sx-grid">
-<p><strong>Alternative 1: <code>behave.ini</code></strong></p>
-<pre><code class="language-ini">[behave]
-paths = features
-junit = true
-junit_directory = reports/behave
-default_tags = not (@wip)
-
-[behave.userdata]
-mwst = 19
-</code></pre>
-<p><code>mwst</code> ist ein eigener Parameter: Zugriff über <code>context.config.userdata["mwst"]</code>.</p>
-</div>
-<div class="sx-grid fragment seminar-step" data-fragment-index="0">
-<p><strong>Alternative 2: <code>pyproject.toml</code></strong></p>
-<pre><code class="language-toml">[tool.behave]
-paths = ["features"]
-junit = true
-junit_directory = "reports/behave"
-default_tags = ["not (@wip)"]
-
-[tool.behave.userdata]
-mwst = "19"
-</code></pre>
-<p>Wählen Sie eine der Dateien. Für einen einzelnen Lauf überschreibt <code>behave -D mwst=7</code> den Wert.</p>
-</div>
-</div></div>
-<aside class="notes"><p>Planzeit: 2 Minuten (davon Übung/Gespräch: 0 Minuten; bereits enthalten). Tag 2.</p>
-<p>Die Konfigurationen vergleichen. Mit -D mwst=19 lassen sich Werte auf der Kommandozeile setzen; Steps lesen sie über context.config.userdata. TOML verwendet [tool.behave] und unterstützt keine Prozentinterpolation. default_tags definiert den Standardfilter.</p>
+<p>Vor jedem Aufruf die erwartete Auswahl benennen lassen. and verlangt beide Eigenschaften, or mindestens eine, not schließt aus. Klammern gruppieren den Ausdruck. Das @ ist in der Kommandozeile optional. Ohne CLI-Filter kann default_tags aus der Konfiguration gelten; ohne jeden Filter laufen alle Szenarien. Zum Nachschlagen: behave --tags-help.</p>
 </aside></section>
 <section class="code-slide code-split">
-<div class="slide-frame"><header class="slide-heading"><h2>Szenarien mit Tags auswählen</h2></header><div class="slide-body"><pre><code class="language-text">behave --tags="@smoke"
-behave --tags="not @wip"
-behave --tags="@smoke or @staffel"
-behave --tags="(@slow and not @fixme) or @smoke"
-behave --tags="not (@fixme or @xfail)"
+<div class="slide-frame"><header class="slide-heading"><h2>Ein Feature-Tag gilt für alle seine Szenarien</h2></header><div class="slide-body"><pre><code class="language-gherkin">@rabatt
+Feature: Kundenrabatt
+
+  @smoke
+  Scenario: VIP-Kunde erhält zehn Prozent
+    ...
+
+  @staffel
+  Scenario Outline: Staffelrabatt
+    ...
 </code></pre><div class="code-commentary">
 
-<p class="fragment seminar-step" data-fragment-index="0">Kombinieren Sie Tags mit <strong><code>and</code>, <code>or</code>, <code>not</code> und Klammern</strong>. Das <code>@</code> ist optional. Ohne <code>--tags</code> gilt der Filter aus der Konfiguration; ohne jeden Filter laufen alle Szenarien.</p>
-<p class="fragment seminar-step" data-fragment-index="1"><code>@wip</code> kennzeichnet ein unfertiges Szenario. Erst der Filter <code>not @wip</code> schließt es vom Lauf aus.</p>
+<p class="fragment seminar-step" data-fragment-index="0">Mit <code>--tags="@rabatt"</code> laufen <strong>alle Szenarien dieser Datei</strong>. Mit <code>--tags="@rabatt and @smoke"</code> läuft nur der Smoke-Fall.</p>
+<p class="fragment seminar-step" data-fragment-index="1">Ein <code>@wip</code> am Feature würde bei <code>not @wip</code> die ganze Datei ausschließen.</p>
 
-</div></div><footer class="slide-sources fragment seminar-fade" data-fragment-index="1"><p class="tiny muted">Quelle: <a href="https://behave.readthedocs.io/en/stable/tag_expressions/">behave-Doku, Tag Expressions</a></p></footer></div>
-<aside class="notes"><p>Planzeit: 3 Minuten (davon Übung/Gespräch: 0 Minuten; bereits enthalten). Tag 2.</p>
-<p>Einen Ausdruck gemeinsam auswerten und mit behave --tags-help prüfen. Im Kurs gelten Tag-Expressions v2 unter behave 1.3.3. Die Dokumentation kündigt den Wegfall der alten v1-Syntax für behave 1.4.0 an.</p>
+</div></div><footer class="slide-sources fragment seminar-fade" data-fragment-index="1"><p class="tiny muted">Quelle: behave · <a href="https://behave.readthedocs.io/en/stable/behave/">Tags</a>, <a href="https://behave.readthedocs.io/en/stable/tag_expressions/">Tag-Muster</a></p></footer></div>
+<aside class="notes"><p>Planzeit: 1 Minuten (davon Übung/Gespräch: 0 Minuten; bereits enthalten). Tag 2.</p>
+<p>Gekürzter Feature-Auszug, keine vollständige Datei zum Ausführen. Tags werden auch von Rule an ihre Szenarien sowie von Outline und Examples an die erzeugten Szenarien weitergegeben. Zum Nachschlagen: behave unterstützt Muster wie @fixture.* (Präfix), @*.one (Suffix) und @<em>foo</em> (Bestandteil). Diese Muster sind eine behave-Erweiterung.</p>
 </aside></section>
-<section>
-<div class="slide-frame"><header class="slide-heading"><h2>Tag-Muster und Vererbung</h2></header><div class="slide-body">
-<p>Tag-Ausdrücke unterstützen Platzhalter: <code>@foo.*</code> findet Tags mit dem Präfix <code>foo.</code>, <code>@*.one</code> solche mit dem Suffix <code>.one</code>, <code>@*foo*</code> alle mit dem Bestandteil <code>foo</code>.</p>
-<p class="fragment seminar-step" data-fragment-index="0">Tags werden nach unten weitergegeben:</p>
-<ul>
-<li class="fragment seminar-step" data-fragment-index="1">vom <strong>Feature</strong> an Rules und Szenarien</li>
-<li class="fragment seminar-step" data-fragment-index="2">von der <strong>Rule</strong> an ihre Szenarien</li>
-<li class="fragment seminar-step" data-fragment-index="3">vom <strong>Scenario Outline</strong> und der <strong>Examples-Tabelle</strong> an die daraus erzeugten Szenarien</li>
-</ul>
-<p class="fragment seminar-step" data-fragment-index="4">Ein Tag am Feature gilt damit für alle Szenarien in der Datei.</p>
+<section class="code-slide">
+<div class="slide-frame"><header class="slide-heading"><h2>Hooks bereiten den Szenariolauf vor</h2></header><div class="slide-body">
+<p>Ein <strong>Hook</strong> ist eine Python-Funktion, die behave zu einem festgelegten Zeitpunkt aufruft.</p>
+<pre><code class="language-python"># Ausschnitt aus features/environment.py
+def before_scenario(context, scenario):
+    context.coupon = None
+</code></pre>
+<p class="fragment seminar-step" data-fragment-index="0"><code>before_scenario</code> läuft <strong>vor jedem ausgewählten Szenario</strong>. Damit haben Szenarien ohne Coupon den definierten Startwert <code>None</code>.</p>
+<p class="fragment seminar-step" data-fragment-index="1">Die fachlichen Ausgangsdaten stehen weiterhin im <strong>Given</strong>. Hooks übernehmen die technische Vorbereitung; <code>after_scenario</code> ermöglicht die Nachbereitung.</p>
 
-</div><footer class="slide-sources fragment seminar-fade" data-fragment-index="4"><p class="tiny muted">Quelle: behave-Doku, <a href="https://behave.readthedocs.io/en/stable/tag_expressions/">Tag Expressions</a> und <a href="https://behave.readthedocs.io/en/stable/behave/">Using behave</a></p></footer></div>
-<aside class="notes"><p>Vertiefung ohne separat eingeplantes Zeitfenster. Planzeit: 0 Minuten (davon Übung/Gespräch: 0 Minuten; bereits enthalten). Tag 2.</p>
-<p>Ein @wip am Feature schließt mit not @wip alle zugehörigen Szenarien aus. Die Platzhalter sind eine behave-Erweiterung. Präfixe wie fixture. oder domain. können die Auswahl erleichtern.</p>
+</div><footer class="slide-sources fragment seminar-fade" data-fragment-index="1"><p class="tiny muted">Quelle: <a href="https://behave.readthedocs.io/en/stable/api/#environment-file-functions">behave · Environment Hooks</a></p></footer></div>
+<aside class="notes"><p>Planzeit: 2 Minuten (davon Übung/Gespräch: 0 Minuten; bereits enthalten). Tag 2.</p>
+<p>An das environment.py aus Teil III anschließen; der Importpfad steht weiterhin auf Modulebene. Grobe Reihenfolge: before_all, vor einem Feature dessen Tag-Hooks und before_feature, vor einem Szenario dessen Tag-Hooks und before_scenario, Background und Steps, after_scenario, after_tag, registriertes Cleanup. Für Rules gibt es zusätzlich before_rule und after_rule. Tag-Hooks laufen je Tag in Dateireihenfolge. Übersprungene Szenarien führen keine Szenario-Hooks aus. before_step und after_step rahmen einzelne Steps ein.</p>
+</aside></section>
+<section class="table-slide">
+<div class="slide-frame"><header class="slide-heading"><h2><code>context</code>: Szenariodaten bleiben getrennt</h2></header><div class="slide-body">
+<p>Given, When und Then greifen <strong>innerhalb eines Szenarios</strong> auf dieselben Werte zu:</p>
+<table>
+<thead>
+<tr>
+<th>Eigener Wert</th>
+<th>Wird gesetzt in</th>
+<th>Wird verwendet in</th>
+</tr>
+</thead>
+<tbody>
+<tr class="fragment seminar-fade" data-fragment-index="0">
+<td><code>context.customer_type</code></td>
+<td>Given</td>
+<td>When</td>
+</tr>
+<tr class="fragment seminar-fade" data-fragment-index="1">
+<td><code>context.subtotal</code></td>
+<td>Given</td>
+<td>When</td>
+</tr>
+<tr class="fragment seminar-fade" data-fragment-index="2">
+<td><code>context.discount</code></td>
+<td>When</td>
+<td>Then</td>
+</tr>
+</tbody>
+</table>
+<p class="fragment seminar-step" data-fragment-index="3">behave entfernt diese Werte <strong>am Ende des Szenarios</strong>. Das nächste Szenario setzt seine eigenen Daten.</p>
+<p class="fragment seminar-step" data-fragment-index="4">Die Lebensdauer hängt vom Setzzeitpunkt ab: Werte aus <code>before_all</code> gelten für den Lauf, aus <code>before_feature</code> für ein Feature und aus <code>before_scenario</code> für ein Szenario.</p>
+
+</div><footer class="slide-sources fragment seminar-fade" data-fragment-index="4"><p class="tiny muted">Quelle: <a href="https://behave.readthedocs.io/en/stable/appendix.context_attributes/">behave · Context Attributes</a></p></footer></div>
+<aside class="notes"><p>Planzeit: 2 Minuten (davon Übung/Gespräch: 0 Minuten; bereits enthalten). Tag 2.</p>
+<p>Die Werte der drei Tabellenzeilen werden in Szenario-Steps gesetzt. context ist ein geschichteter Speicher, kein neues Python-Objekt pro Step. Die Schichten sind Lauf, Feature, Rule und Szenario. Ein innerer Wert kann einen äußeren vorübergehend überdecken. Nach Entfernen der inneren Schicht wird der äußere wieder sichtbar. Eigene Attribute eindeutig benennen: feature, scenario, tags, table, text, failed und config verwaltet behave. Überschreiben kann ContextMaskWarning auslösen. Mit &quot;feature&quot; in context lässt sich die Existenz prüfen; del entfernt nur Werte der aktuellen Schicht.</p>
 </aside></section>
 <section class="code-slide code-split">
-<div class="slide-frame"><header class="slide-heading"><h2>Ressourcen mit Tag-Fixtures bereitstellen</h2></header><div class="slide-body"><pre><code class="language-python">from pathlib import Path
+<div class="slide-frame"><header class="slide-heading"><h2>Eine Fixture stellt eine frische Datenbank bereit</h2></header><div class="slide-body"><pre><code class="language-python"># Ergänzung in features/environment.py
+from pathlib import Path
 from tempfile import TemporaryDirectory
-from behave import fixture, use_fixture
+from behave import fixture
 from shop.repository import SqliteOrderRepository
 
 @fixture
-def temp_repository(context):
+def repository(context):
     with TemporaryDirectory() as directory:
-        path = Path(directory) / "shop.db"
-        context.repo = SqliteOrderRepository(path)
-        yield context.repo
+        path = Path(directory) / "orders.sqlite"
+        context.repository = SqliteOrderRepository(path)
+        yield context.repository
+</code></pre><div class="code-commentary">
+
+<p class="fragment seminar-step" data-fragment-index="0">Eine <strong>Fixture</strong> verbindet Aufbau und Aufräumen einer Testressource.</p>
+<p class="fragment seminar-step" data-fragment-index="1">Vor <code>yield</code> wird die Datenbank angelegt. Während des Szenarios verwenden die Steps <code>context.repository</code>. Beim Fortsetzen endet der <code>with</code>-Block und löscht das temporäre Verzeichnis.</p>
+
+</div></div><footer class="slide-sources fragment seminar-fade" data-fragment-index="1"><p class="tiny muted">Quelle: <a href="https://behave.readthedocs.io/en/stable/fixtures/">behave · Fixtures</a></p></footer></div>
+<aside class="notes"><p>Planzeit: 2 Minuten (davon Übung/Gespräch: 0 Minuten; bereits enthalten). Tag 2.</p>
+<p>Der Importpfad aus Teil III muss vor dem shop-Import eingerichtet sein. Die Funktion allein startet noch keine Fixture; die Aktivierung folgt auf der nächsten Folie. SqliteOrderRepository öffnet und schließt seine Verbindung je Methodenaufruf, daher kann der temporäre Ordner anschließend entfernt werden. TemporaryDirectory ist hier die kompakte Entsprechung zu mkdtemp/rmtree aus der Lab-Lösung und räumt auch auf, wenn die Erzeugung des Repositorys fehlschlägt.</p>
+</aside></section>
+<section class="code-slide">
+<div class="slide-frame"><header class="slide-heading"><h2>Ein Tag fordert die Datenbank-Fixture an</h2></header><div class="slide-body">
+<p><strong>Über dem Szenario in <code>features/rabatt.feature</code>:</strong></p>
+<pre><code class="language-gherkin">@fixture.repository
+Scenario: Bestellung wird gespeichert
+</code></pre>
+<p class="fragment seminar-step" data-fragment-index="0"><strong>Ergänzung in <code>features/environment.py</code>:</strong></p>
+<pre class="fragment seminar-step" data-fragment-index="0"><code class="language-python">from behave import use_fixture
 
 def before_tag(context, tag):
     if tag == "fixture.repository":
-        use_fixture(temp_repository, context)
-</code></pre><div class="code-commentary">
+        use_fixture(repository, context)
+</code></pre>
+<p class="fragment seminar-step" data-fragment-index="1"><strong>Erst der Hook aktiviert die Fixture.</strong> Am Szenario-Tag gilt sie für dieses Szenario; am Feature-Tag für das gesamte Feature. behave räumt nach dem jeweiligen Bereich auf, auch wenn ein Step fehlschlägt.</p>
 
-<p class="fragment seminar-step" data-fragment-index="0"><strong><code>@fixture.repository</code></strong> aktiviert die Fixture. Am <code>yield</code> ist die Datenbank bereit. Beim Aufräumen setzt behave die Fixture fort: Der <code>with</code>-Block endet und entfernt Ordner samt Datei.</p>
-
-</div></div><footer class="slide-sources fragment seminar-fade" data-fragment-index="0"><p class="tiny muted">Quelle: <a href="https://behave.readthedocs.io/en/stable/fixtures/">behave-Doku, Fixtures</a></p></footer></div>
+</div><footer class="slide-sources fragment seminar-fade" data-fragment-index="1"><p class="tiny muted">Quelle: <a href="https://behave.readthedocs.io/en/stable/fixtures/">behave · Fixtures verwenden und aufräumen</a></p></footer></div>
 <aside class="notes"><p>Planzeit: 10 Minuten (davon Übung/Gespräch: 10 Minuten; bereits enthalten). Tag 2.</p>
-<p>Zehn Minuten gemeinsame Fixture-Demo aus Lab 7. Das yield-Muster mit pytest vergleichen: davor Aufbau, danach Abbau. Bei mehreren Fixture-Tags kann use_fixture_by_tag mit einer Registrierungstabelle die Zuordnung übernehmen.</p>
-</aside></section>
-<section class="table-slide">
-<div class="slide-frame"><header class="slide-heading"><h2>Wann behave Ressourcen freigibt</h2></header><div class="slide-body">
-<table>
-<thead>
-<tr>
-<th>Bereich</th>
-<th>Einrichtung</th>
-<th>Aufräumen</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Lauf</td>
-<td><code>before_all</code></td>
-<td>nach <code>after_all</code></td>
-</tr>
-<tr class="fragment seminar-fade" data-fragment-index="0">
-<td>Feature</td>
-<td><code>before_feature</code> oder <code>before_tag</code></td>
-<td>nach <code>after_feature</code></td>
-</tr>
-<tr class="fragment seminar-fade" data-fragment-index="1">
-<td>Szenario</td>
-<td><code>before_scenario</code> oder <code>before_tag</code></td>
-<td>nach <code>after_scenario</code></td>
-</tr>
-<tr class="fragment seminar-fade" data-fragment-index="2">
-<td>Rule</td>
-<td><code>before_rule</code> oder <code>before_tag</code></td>
-<td>nach <code>after_rule</code></td>
-</tr>
-</tbody>
-</table>
-<p class="fragment seminar-step" data-fragment-index="3">Die Tabelle gilt für mit <code>use_fixture</code> oder <code>add_cleanup</code> registriertes Aufräumen. Scheitert der Aufbau (<strong>Setup</strong>), bricht behave den betroffenen Bereich ab. Bereits registrierte Aufräumfunktionen werden trotzdem ausgeführt.</p>
-
-</div><footer class="slide-sources fragment seminar-fade" data-fragment-index="3"><p class="tiny muted">Quelle: <a href="https://behave.readthedocs.io/en/stable/fixtures/">behave-Doku, Fixtures</a></p></footer></div>
-<aside class="notes"><p>Planzeit: 2 Minuten (davon Übung/Gespräch: 0 Minuten; bereits enthalten). Tag 2.</p>
-<p>Dasselbe Fixture-Tag einmal am Feature und einmal am Szenario betrachten. Seine Position bestimmt die Lebensdauer der Ressource. Bei Setup-Fehlern werden die bereits registrierten Aufräumfunktionen ausgeführt; eigener Setup-Code muss dafür seine Ressourcen korrekt registrieren.</p>
+<p>Zehn Minuten gemeinsame Demo: Aufruf mit behave --tags=@fixture.repository, dann save und get im Step-Code verfolgen. Die Feature-Zeilen zeigen nur den Szenariokopf; die vorhandenen Schritte bleiben darunter. before_tag läuft vor before_scenario: Der spätere Hook darf context.repository nicht wieder überschreiben. Die Schreibweise fixture.repository ist eine Konvention, kein eingebauter Automatismus. use_fixture registriert das Cleanup auf der aktuellen Context-Schicht. Es läuft nach after_scenario beziehungsweise after_feature. Für den ganzen Lauf in before_all aktivierte Fixtures werden nach after_all aufgeräumt. add_cleanup registriert alternativ eine Aufräumfunktion. Bei Setup-Fehlern muss teilweise aufgebauter Zustand durch with, try/finally oder früh registriertes Cleanup abgesichert sein.</p>
 </aside></section>
 <section class="code-slide code-split">
-<div class="slide-frame"><header class="slide-heading"><h2>Hooks: die Reihenfolge im Lauf</h2></header><div class="slide-body"><pre><code class="language-text">before_all
-  before_tag   je Feature-Tag
-  before_feature
-      before_tag   je Rule-Tag
-      before_rule
-          before_tag   je Szenario-Tag
-          before_scenario
-              before_step / Schritt / after_step
-          after_scenario
-          after_tag
-      after_rule
-      after_tag
-  after_feature
-  after_tag
-after_all
+<div class="slide-frame"><header class="slide-heading"><h2>Standardwerte in <code>behave.ini</code> festhalten</h2></header><div class="slide-body"><pre><code class="language-ini"># behave.ini im Projektordner
+[behave]
+paths = features
+show_timings = false
+
+[behave.userdata]
+mwst = 19
 </code></pre><div class="code-commentary">
 
-<p class="fragment seminar-step" data-fragment-index="0"><strong>Hooks</strong> sind Python-Funktionen für Vor- und Nachbereitung. Tags sind möglich an <code>Feature</code>, <code>Rule</code>, <code>Scenario</code>, <code>ScenarioOutline</code> und <code>Examples</code>. Die Tag-Hooks laufen je Tag <strong>in der Reihenfolge der Feature-Datei</strong>.</p>
+<p class="fragment seminar-step" data-fragment-index="0"><strong><code>[behave]</code> steuert den Runner:</strong> Feature-Pfad und Laufzeitanzeige.</p>
+<p class="fragment seminar-step" data-fragment-index="1"><strong><code>[behave.userdata]</code> liefert eigene Parameter:</strong> hier <code>mwst</code> für das Rechenbeispiel.</p>
+<p class="fragment seminar-step" data-fragment-index="2">Kommandozeilenoptionen überschreiben die Vorgaben für einen Lauf.</p>
 
-</div></div><footer class="slide-sources fragment seminar-fade" data-fragment-index="0"><p class="tiny muted">Quelle: <a href="https://behave.readthedocs.io/en/stable/api/">behave-Doku, API Reference</a></p></footer></div>
-<aside class="notes"><p>Vertiefung ohne separat eingeplantes Zeitfenster. Planzeit: 0 Minuten (davon Übung/Gespräch: 0 Minuten; bereits enthalten). Tag 2.</p>
-<p>Optional die Reihenfolge nachvollziehen: Tag-Hooks vor dem Bereichs-Hook, Background vor den Szenarioschritten. Übersprungene Szenarien führen ihre Hooks nicht aus. Für die Übungen genügt zunächst die gezeigte Fixture-Verwendung.</p>
+</div></div><footer class="slide-sources fragment seminar-fade" data-fragment-index="2"><p class="tiny muted">Quelle: behave · <a href="https://behave.readthedocs.io/en/stable/behave/">Konfiguration</a>, <a href="https://behave.readthedocs.io/en/stable/userdata/">Userdata</a></p></footer></div>
+<aside class="notes"><p>Planzeit: 2 Minuten (davon Übung/Gespräch: 0 Minuten; bereits enthalten). Tag 2.</p>
+<p>Genau diese beiden Abschnitte verwendet Lab 7. Den Unterschied zwischen Runner-Einstellungen und eigenen Anwendungsparametern betonen. Als weitere Runner-Vorgaben sind default_tags = not @wip und junit = true mit junit_directory möglich. Alternativ unterstützt pyproject.toml [tool.behave] und [tool.behave.userdata]; dort sind paths und default_tags Listen, userdata-Werte können als Strings geschrieben werden. Nur eine der Konfigurationsvarianten als führende Projektdatei verwenden. TOML unterstützt keine Prozentinterpolation.</p>
+</aside></section>
+<section class="code-slide">
+<div class="slide-frame"><header class="slide-heading"><h2>Laufparameter an die Anwendung übergeben</h2></header><div class="slide-body">
+<pre><code class="language-python"># Ausschnitt aus features/steps/rabatt_steps.py
+from decimal import Decimal
+from behave import when
+from shop.tax import gross_total
+
+@when("der Bruttobetrag berechnet wird")
+def step_brutto_berechnen(context):
+    context.tax_percent = Decimal(context.config.userdata["mwst"])
+    context.gross = gross_total(context.total, context.tax_percent)
+</code></pre>
+<p class="fragment seminar-step" data-fragment-index="0">Der Step übergibt den Steuersatz an <strong><code>gross_total</code></strong>. Für 90,00 € netto erwartet das Szenario bei 19 % fest <strong>107,10 € brutto</strong>.</p>
+<pre class="fragment seminar-step" data-fragment-index="1"><code class="language-text">behave --tags=@mwst -D mwst=7
+</code></pre>
+<p class="fragment seminar-step" data-fragment-index="2"><strong>Bewusst rot:</strong> Die Anwendung liefert jetzt 96,30 €. Die Erwartung im Szenario bleibt 107,10 €.</p>
+
+</div><footer class="slide-sources fragment seminar-fade" data-fragment-index="2"><p class="tiny muted">Quelle: <a href="https://behave.readthedocs.io/en/stable/userdata/">behave · Userdata</a></p></footer></div>
+<aside class="notes"><p>Planzeit: 2 Minuten (davon Übung/Gespräch: 0 Minuten; bereits enthalten). Tag 2.</p>
+<p>Die Steuerfunktion muss in src/shop/tax.py existieren. When berechnet keine eigene Vergleichslösung; Then prüft context.gross gegen den im Szenario festgelegten Betrag. Das Beispiel führt den roten Kontrolllauf aus der Anleitung vor. Der Parameter ist eine Eingabe, keine Vorschrift zum Anpassen des erwarteten Ergebnisses. In einer fachlichen Szenariotabelle können unterschiedliche Steuersätze auch ausdrücklich als Beispiele stehen.</p>
 </aside></section>
 <section class="table-slide">
-<div class="slide-frame"><header class="slide-heading"><h2>Formatter und Reporter</h2></header><div class="slide-body">
+<div class="slide-frame"><header class="slide-heading"><h2>Die Ausgabe passend zum Zweck wählen</h2></header><div class="slide-body">
 <table>
 <thead>
 <tr>
-<th>Art</th>
-<th>Name</th>
-<th>Ausgabe</th>
+<th>Zweck</th>
+<th>Aufruf</th>
+<th>Ergebnis</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Formatter</td>
-<td><code>pretty</code></td>
-<td>Details zu den einzelnen Schritten</td>
+<td>Einen Fehler untersuchen</td>
+<td><code>behave -f pretty</code></td>
+<td>Schritte und Fehlermeldungen im Terminal</td>
 </tr>
 <tr class="fragment seminar-fade" data-fragment-index="0">
-<td>Formatter</td>
-<td><code>progress</code></td>
+<td>Einen Lauf kurz verfolgen</td>
+<td><code>behave -f progress</code></td>
 <td>kompakte Fortschrittsanzeige</td>
 </tr>
 <tr class="fragment seminar-fade" data-fragment-index="1">
-<td>Formatter</td>
-<td><code>json</code>, <code>json.pretty</code></td>
-<td>JSON, optional eingerückt</td>
-</tr>
-<tr class="fragment seminar-fade" data-fragment-index="2">
-<td>Reporter</td>
-<td><code>junit</code></td>
-<td>XML für CI-Systeme</td>
-</tr>
-<tr class="fragment seminar-fade" data-fragment-index="3">
-<td>Reporter</td>
-<td><code>summary</code></td>
-<td>Zusammenfassung des Laufs</td>
+<td>Ergebnisse weiterverarbeiten</td>
+<td><code>behave -f json.pretty -o reports/behave.json</code></td>
+<td>strukturierte JSON-Datei</td>
 </tr>
 </tbody>
 </table>
-<p class="fragment seminar-step" data-fragment-index="4">Formatter erhalten Ereignisse zu einzelnen Schritten; Reporter verarbeiten größere Abschnitte des Laufs. Sie können mehrere Formatter verwenden und ihre Ausgaben in getrennte Dateien schreiben.</p>
+<p class="fragment seminar-step" data-fragment-index="2"><code>-f</code> wählt einen <strong>Formatter</strong>, also die Darstellung der Testergebnisse. Ergänzen Sie den gewünschten Tag-Filter wie bei jedem anderen Lauf.</p>
+<p class="fragment seminar-step" data-fragment-index="3">Für die Testansicht des CI-Servers erzeugen wir zusätzlich <strong>JUnit-XML</strong> mit dem JUnit-Reporter.</p>
 
-</div><footer class="slide-sources fragment seminar-fade" data-fragment-index="4"><p class="tiny muted">Quelle: <a href="https://behave.readthedocs.io/en/stable/appendix.formatters/">behave-Doku, Formatters and Reporters</a></p></footer></div>
-<aside class="notes"><p>Planzeit: 3 Minuten (davon Übung/Gespräch: 0 Minuten; bereits enthalten). Tag 2.</p>
-<p>Ausgabe im Terminal und Berichtsdatei unterscheiden. Mehrere Formatter brauchen sinnvoll getrennte Ausgaben. Anhänge über context.attach werden laut Dokumentation vom JSON-Formatter unterstützt; JUnit wird für die Testübersicht des CI-Servers verwendet.</p>
+</div><footer class="slide-sources fragment seminar-fade" data-fragment-index="3"><p class="tiny muted">Quelle: <a href="https://behave.readthedocs.io/en/stable/appendix.formatters/">behave · Formatters and Reporters</a></p></footer></div>
+<aside class="notes"><p>Planzeit: 2 Minuten (davon Übung/Gespräch: 0 Minuten; bereits enthalten). Tag 2.</p>
+<p>Die Formatnamen nicht als eigenen Lernkatalog behandeln, sondern vom Zweck ausgehen. Die Aufrufe zeigen jeweils die Ausgabeoption; im Kurs --tags=&quot;not @wip&quot; ergänzen. reports bei Bedarf vorher mit mkdir -p reports anlegen. behave --format help listet alle Formatter. Formatter erhalten einzelne Step-Ereignisse, Reporter größere Abschnitte; summary fasst den Lauf zusammen. Mehrere Formatter sind möglich, aber normalerweise schreibt nur einer auf stdout. json und json.pretty unterscheiden sich in der Einrückung. context.attach wird vom JSON-Formatter unterstützt.</p>
 </aside></section>
-<section class="code-slide code-split">
-<div class="slide-frame"><header class="slide-heading"><h2>JUnit-Berichte erzeugen</h2></header><div class="slide-body"><pre><code class="language-text">behave --junit --junit-directory reports/behave
-
-behave --tags="@smoke or @staffel" \
+<section class="code-slide">
+<div class="slide-frame"><header class="slide-heading"><h2>JUnit macht Szenarien in der CI sichtbar</h2></header><div class="slide-body">
+<pre><code class="language-text">behave --tags="not @wip" \
        --junit --junit-directory reports/behave
+</code></pre>
+<p class="fragment seminar-step" data-fragment-index="0"><strong>Ein Szenario wird zu einem Testeintrag</strong> – hier ein gekürzter XML-Auszug:</p>
+<pre class="fragment seminar-step" data-fragment-index="0"><code class="language-xml">&lt;testcase classname="rabatt.Kundenrabatt"
+          name="VIP-Kunde erhält zehn Prozent"
+          status="passed" time="0.001"&gt;
+  &lt;system-out&gt;...&lt;/system-out&gt;
+&lt;/testcase&gt;
+</code></pre>
+<p class="fragment seminar-step" data-fragment-index="1">behave schreibt <strong>eine XML-Datei je Feature</strong>. Der CI-Server liest daraus Namen, Ergebnis, Dauer und Schrittprotokoll. Deshalb sammeln wir mit <code>reports/behave/*.xml</code> alle Feature-Berichte ein.</p>
 
-behave -f json.pretty -o reports/behave.json
-</code></pre><div class="code-commentary">
-
-<p class="fragment seminar-step" data-fragment-index="0"><code>--junit</code> aktiviert den Reporter, <code>--junit-directory</code> bestimmt den Ausgabeordner.</p>
-<p class="fragment seminar-step" data-fragment-index="1">behave schreibt <strong>eine XML-Datei je Feature</strong>. Verwenden Sie in der CI daher ein Dateimuster für den gesamten Ordner. Bei aktivem JUnit-Reporter werden stdout und stderr unabhängig von den Capture-Schaltern in den Bericht übernommen.</p>
-
-</div></div><footer class="slide-sources fragment seminar-fade" data-fragment-index="1"><p class="tiny muted">Quelle: <a href="https://behave.readthedocs.io/en/stable/behave/">behave-Doku, Using behave</a></p></footer></div>
-<aside class="notes"><p>Planzeit: 45 Minuten (davon Übung/Gespräch: 45 Minuten; bereits enthalten). Tag 2.</p>
-<p>Lab 7: 45 Minuten eigene Arbeit. Outline und Tags ergänzen, den unfertigen Versandgutschein als @wip ausschließen und shop.tax.gross_total testgetrieben entwickeln. When ruft die Funktion auf, Then prüft context.gross. Am Ende TESTS-rabatt.xml mit acht und TESTS-coupon.xml mit drei Einträgen erzeugen: zehn bestanden, einer übersprungen. Die zehn Minuten Fixture-Demo sind separat eingeplant.</p>
+</div><footer class="slide-sources fragment seminar-fade" data-fragment-index="1"><p class="tiny muted">Quelle: <a href="https://behave.readthedocs.io/en/stable/behave/">behave · JUnit-Berichte</a></p></footer></div>
+<aside class="notes"><p>Planzeit: 2 Minuten (davon Übung/Gespräch: 0 Minuten; bereits enthalten). Tag 2.</p>
+<p>TESTS-rabatt.xml und TESTS-coupon.xml aus einem Lauf öffnen. Der Auszug ist auf den testcase reduziert, die konkrete Laufzeit ist beispielhaft. In system-out steht das Protokoll der Schritte; bei einem Testfehler kommt ein failure-Element hinzu. Übersprungene Szenarien haben ein skipped-Element. Namen sollten auch ohne geöffnete Feature-Datei verständlich sein. JUnit ist ein Austauschformat und verlangt keine Java-Tests. stdout und stderr werden bei aktivem JUnit-Reporter unabhängig von Capture-Schaltern in den Bericht übernommen.</p>
 </aside></section>
-<section class="code-slide code-split">
-<div class="slide-frame"><header class="slide-heading"><h2>Was im XML steht</h2></header><div class="slide-body"><pre><code class="language-xml">&lt;testsuite name="discount.Customer discount"
-           tests="1" failures="0" skipped="0"&gt;
-  &lt;testcase classname="discount.Customer discount"
-            name="VIP customer receives discount"
-            status="passed" time="0.000185"&gt;
-    &lt;system-out&gt;&lt;![CDATA[
-@scenario.begin
-  Scenario: VIP customer receives discount
-    Given a VIP customer ... passed in 0.000s
-    ...
-@scenario.end
-]]&gt;&lt;/system-out&gt;
-  &lt;/testcase&gt;
-&lt;/testsuite&gt;
-</code></pre><div class="code-commentary">
-
-<p class="fragment seminar-step" data-fragment-index="0">Ein <code>testcase</code> je Szenario, das vollständige Schrittprotokoll in <code>system-out</code>. GitLab liest daraus Testnamen, Dauer, Ergebnis und Ausgabe. Eine Dateiangabe kann nur erscheinen, wenn das XML sie enthält.</p>
-</div></div></div>
-<aside class="notes"><p>Planzeit: 3 Minuten (davon Übung/Gespräch: 0 Minuten; bereits enthalten). Tag 2.</p>
-<p>Den Auszug mit einem erzeugten Bericht vergleichen. Szenarionamen werden Testnamen; deshalb sollen sie auch ohne Feature-Text verständlich sein. GitLab verwendet Angaben wie classname, name, file, time und system-out aus den Testfällen, nicht die Summenattribute tests und failures der Suite.</p>
+<section>
+<div class="slide-frame"><header class="slide-heading"><h2>Lab 7 · Szenarien auswählen und auswerten</h2></header><div class="slide-body">
+<ol>
+<li>Die <strong>Staffel-Beispiele</strong> als Scenario Outline ausführen.</li>
+<li class="fragment seminar-step" data-fragment-index="0">Mit <strong>Tags</strong> passende Szenarien auswählen und <code>@wip</code> ausschließen.</li>
+<li class="fragment seminar-step" data-fragment-index="1">Eine Bestellung mit der <strong>Datenbank-Fixture</strong> speichern und wieder lesen.</li>
+<li class="fragment seminar-step" data-fragment-index="2"><strong><code>gross_total</code></strong> testgetrieben entwickeln und im Szenario aufrufen.</li>
+<li class="fragment seminar-step" data-fragment-index="3">Einen <strong>JUnit- und einen JSON-Bericht</strong> erzeugen und untersuchen.</li>
+</ol>
+<p class="fragment seminar-step" data-fragment-index="4"><strong>Fertig, wenn:</strong> Sie die Auswahl erklären, die Lebensdauer der Datenbank zeigen und ein Szenario im Bericht wiederfinden können.</p>
+</div></div>
+<aside class="notes"><p>Planzeit: 45 Minuten (davon Übung/Gespräch: 45 Minuten; bereits enthalten). Tag 2.</p>
+<p>45 Minuten eigene Arbeit in der Schritt-für-Schritt-Anleitung. Die zehnminütige gemeinsame Fixture-Demo wurde separat eingeplant. Am Ende bestehen 88 pytest-Tests und zehn behave-Szenarien; ein WIP-Szenario bleibt übersprungen. TESTS-rabatt.xml enthält acht Fälle (einer übersprungen), TESTS-coupon.xml drei bestandene. Der Kontrolllauf mit -D mwst=7 muss wegen der festen Erwartung rot werden. Danach ohne Überschreibung wieder grün ausführen.</p>
 </aside></section>
 <section class="figure-slide">
 <div class="slide-frame"><header class="slide-heading"><h2>pytest und behave in derselben Pipeline</h2></header><div class="slide-body">
@@ -3720,8 +3665,39 @@ behave -f json.pretty -o reports/behave.json
 <aside class="notes"><p>Planzeit: 3 Minuten (davon Übung/Gespräch: 0 Minuten; bereits enthalten). Tag 2.</p>
 <p>Die beiden JUnit-Berichte und den Cobertura-Bericht getrennt zeigen. Für JUnit nur passende Dateien auswählen, damit die Coverage-Datei nicht versehentlich als Testbericht eingelesen wird.</p>
 </aside></section>
+<section class="table-slide">
+<div class="slide-frame"><header class="slide-heading"><h2>Exitcode und Testbericht haben verschiedene Aufgaben</h2></header><div class="slide-body">
+<table>
+<thead>
+<tr>
+<th>Rückmeldung</th>
+<th>Wofür ist sie da?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Exitcode</strong> des Testbefehls</td>
+<td>signalisiert Erfolg (<code>0</code>) oder Fehler (ungleich <code>0</code>)</td>
+</tr>
+<tr class="fragment seminar-fade" data-fragment-index="0">
+<td><strong>JUnit-XML</strong></td>
+<td>zeigt, welcher Test warum fehlgeschlagen ist</td>
+</tr>
+<tr class="fragment seminar-fade" data-fragment-index="1">
+<td><strong>Coverage-XML</strong></td>
+<td>zeigt, welcher Anwendungscode ausgeführt wurde</td>
+</tr>
+</tbody>
+</table>
+<p class="fragment seminar-step" data-fragment-index="2"><strong>Beides gehört in die Pipeline:</strong> den Fehlerstatus erhalten und die Berichte auch nach einem roten Test veröffentlichen.</p>
+<p class="fragment seminar-step" data-fragment-index="3"><code>pytest … || true</code> würde den Fehlerstatus verschlucken. In GitLab macht das Einlesen eines JUnit-Berichts allein den Job nicht rot.</p>
+
+</div><footer class="slide-sources fragment seminar-fade" data-fragment-index="3"><p class="tiny muted">Quelle: <a href="https://docs.gitlab.com/ci/testing/unit_test_reports/">GitLab · Unit test reports</a></p></footer></div>
+<aside class="notes"><p>Planzeit: 2 Minuten (davon Übung/Gespräch: 0 Minuten; bereits enthalten). Tag 2.</p>
+<p>Vor den CI-Dateien die zwei Aufgaben auseinanderhalten: Runner führt Tests aus und liefert den Exitcode; der Server stellt Berichte dar und wendet konfigurierte Regeln an. Jenkins kann über junit zusätzlich UNSTABLE setzen, sofern der Fehlerstatus nicht bereits FAILURE ist; die folgenden Beispiele verwenden unveränderte sh-Exitcodes. GitLab akzeptiert aktuell unter 30 MB pro JUnit-Datei und unter 100 MB pro Job. Solche Grenzen bei konkreten Serverproblemen nachschlagen, nicht auswendig lernen.</p>
+</aside></section>
 <section class="code-slide code-split-wide">
-<div class="slide-frame"><header class="slide-heading"><h2>GitLab CI: der pytest-Job</h2></header><div class="slide-body"><pre><code class="language-yaml">pytest:
+<div class="slide-frame"><header class="slide-heading"><h2>GitLab · Unit-Tests und Coverage ausführen</h2></header><div class="slide-body"><pre><code class="language-yaml">pytest:
   image: python:3.12
   script:
     - pip install -r requirements.txt
@@ -3739,17 +3715,18 @@ behave -f json.pretty -o reports/behave.json
         path: reports/coverage.xml
 </code></pre><div class="code-commentary">
 
-<p class="fragment seminar-step" data-fragment-index="0"><code>when: always</code> bewahrt Berichte auch bei Fehlern. <code>coverage</code> liefert den Prozentwert, <code>coverage_report</code> die Zeilenmarkierung.</p>
+<p class="fragment seminar-step" data-fragment-index="0">In <strong><code>.gitlab-ci.yml</code></strong> führt dieser Job pytest aus und veröffentlicht seine Berichte auch nach einem Testfehler.</p>
+<p class="fragment seminar-step" data-fragment-index="1"><strong><code>coverage</code></strong> liest den Prozentwert aus dem Log. <strong><code>coverage_report</code></strong> verwendet das XML für die Markierungen im Code-Diff.</p>
 
-</div></div><footer class="slide-sources fragment seminar-fade" data-fragment-index="0"><p class="tiny muted">Quelle: docs.gitlab.com, <a href="https://docs.gitlab.com/ci/testing/unit_test_reports/">Unit test reports</a>; <a href="https://docs.gitlab.com/ci/testing/code_coverage/">Code coverage (Coverage reporting, Coverage visualization)</a></p></footer></div>
+</div></div><footer class="slide-sources fragment seminar-fade" data-fragment-index="1"><p class="tiny muted">Quelle: docs.gitlab.com, <a href="https://docs.gitlab.com/ci/testing/unit_test_reports/">Unit test reports</a>; <a href="https://docs.gitlab.com/ci/testing/code_coverage/">Code coverage (Coverage reporting, Coverage visualization)</a></p></footer></div>
 <aside class="notes"><p>Planzeit: 4 Minuten (davon Übung/Gespräch: 0 Minuten; bereits enthalten). Tag 2.</p>
 <p>Die drei Ausgaben zuordnen: JUnit für Testergebnisse, coverage für den Prozentwert aus dem Log und coverage_report für die Markierungen im Diff. Die letzten beiden Einstellungen sind unabhängig. GitLab erwartet bei junit Dateinamen oder Muster, keine reinen Verzeichnispfade. artifacts:paths macht Dateien zusätzlich herunterladbar; when: always erhält sie auch nach einem Testfehler.</p>
 </aside></section>
 <section class="code-slide code-split">
-<div class="slide-frame"><header class="slide-heading"><h2>GitLab CI: Der behave-Job</h2></header><div class="slide-body"><pre><code class="language-yaml">behave:
+<div class="slide-frame"><header class="slide-heading"><h2>GitLab · BDD-Szenarien getrennt ausführen</h2></header><div class="slide-body"><pre><code class="language-yaml">behave:
   image: python:3.12
   script:
-    - pip install -U pip behave
+    - pip install -r requirements.txt
     - &gt;
       behave --tags="not @wip"
       --junit --junit-directory reports/behave
@@ -3761,27 +3738,15 @@ behave -f json.pretty -o reports/behave.json
       junit: reports/behave/*.xml
 </code></pre><div class="code-commentary">
 
-<p class="fragment seminar-step" data-fragment-index="0">Das Muster <code>*.xml</code> erfasst die Berichte aller Features. Mit <code>not @wip</code> werden die als unfertig markierten Szenarien übersprungen.</p>
+<p class="fragment seminar-step" data-fragment-index="0">Dieser zweite Job steht ebenfalls in <strong><code>.gitlab-ci.yml</code></strong>. Er führt die fertigen Szenarien aus und sammelt alle Feature-Berichte ein.</p>
+<p class="fragment seminar-step" data-fragment-index="1">Beide Jobs können unabhängig laufen. So bleibt sichtbar, ob die Unit-Tests oder die BDD-Szenarien scheitern.</p>
 
-</div></div><footer class="slide-sources fragment seminar-fade" data-fragment-index="0"><p class="tiny muted">Quelle: <a href="https://docs.gitlab.com/ci/testing/unit_test_reports/">docs.gitlab.com, Unit test reports</a>; <a href="https://behave.readthedocs.io/en/stable/behave/">behave-Doku, Using behave</a></p></footer></div>
+</div></div><footer class="slide-sources fragment seminar-fade" data-fragment-index="1"><p class="tiny muted">Quelle: <a href="https://docs.gitlab.com/ci/testing/unit_test_reports/">docs.gitlab.com, Unit test reports</a>; <a href="https://behave.readthedocs.io/en/stable/behave/">behave-Doku, Using behave</a></p></footer></div>
 <aside class="notes"><p>Planzeit: 4 Minuten (davon Übung/Gespräch: 0 Minuten; bereits enthalten). Tag 2.</p>
 <p>Die beiden Jobs liegen in derselben Stage und können unabhängig ausgeführt werden. So ist erkennbar, welche Suite scheitert. Eindeutige Testnamen verwenden; GitLab zeigt bei doppelten Namen nur den ersten entsprechenden Test.</p>
 </aside></section>
-<section>
-<div class="slide-frame"><header class="slide-heading"><h2>GitLab: Der Exitcode bestimmt den Jobstatus</h2></header><div class="slide-body">
-<ul>
-<li>Ein JUnit-Bericht macht einen Job <strong>nicht von sich aus rot</strong>.</li>
-<li class="fragment seminar-step" data-fragment-index="0">Das Skript muss mit einem <strong>Exitcode ungleich null</strong> (Fehlerstatus) enden. pytest und behave liefern ihn bei Testfehlern.</li>
-<li class="fragment seminar-step" data-fragment-index="1"><code>|| true</code> unterdrückt diesen Fehler. Achten Sie auch darauf, den Exitcode beim Aufräumen zu erhalten.</li>
-<li class="fragment seminar-step" data-fragment-index="2">Für JUnit-Berichte gelten Größenlimits: weniger als <strong>30 MB je Datei</strong>, weniger als <strong>100 MB je Job</strong>.</li>
-</ul>
-
-</div><footer class="slide-sources fragment seminar-fade" data-fragment-index="2"><p class="tiny muted">Quelle: <a href="https://docs.gitlab.com/ci/testing/unit_test_reports/">docs.gitlab.com, Unit test reports</a></p></footer></div>
-<aside class="notes"><p>Planzeit: 2 Minuten (davon Übung/Gespräch: 0 Minuten; bereits enthalten). Tag 2.</p>
-<p>Den Exitcode mit den Job-Ergebnissen verbinden. Ein fehlgeschlagener pytest-Job verhindert den behave-Job derselben Stage nicht grundsätzlich. Nach der Jenkins-Einführung beginnt Lab 8 auf der Coverage-Folie; beide Gerüste werden bearbeitet.</p>
-</aside></section>
 <section class="code-slide code-split">
-<div class="slide-frame"><header class="slide-heading"><h2>Jenkins: Pipeline mit Docker-Agent</h2></header><div class="slide-body"><pre><code class="language-groovy">pipeline {
+<div class="slide-frame"><header class="slide-heading"><h2>Jenkins · Die Ausführungsumgebung festlegen</h2></header><div class="slide-body"><pre><code class="language-groovy">pipeline {
     agent {
         docker { image 'python:3.12-slim' }
     }
@@ -3805,7 +3770,7 @@ behave -f json.pretty -o reports/behave.json
 <p>Der Container bringt Python mit; auf dem Jenkins-Knoten werden Docker und das Docker-Pipeline-Plugin benötigt. Ein eingehängter pip-Cache kann Installationen beschleunigen. Ohne Docker lässt sich für eine Demo ein vorbereiteter Agent mit Python verwenden.</p>
 </aside></section>
 <section class="code-slide code-split">
-<div class="slide-frame"><header class="slide-heading"><h2>Jenkins: Teststufen und Berichte</h2></header><div class="slide-body"><pre><code class="language-groovy">stage('Unit tests') {
+<div class="slide-frame"><header class="slide-heading"><h2>Jenkins · Tests starten und Berichte sammeln</h2></header><div class="slide-body"><pre><code class="language-groovy">stage('Unit tests') {
     steps {
         sh 'pytest --junitxml=reports/junit/pytest.xml \
             --cov=shop --cov-report=xml:reports/cov/cov.xml'
@@ -3828,7 +3793,7 @@ stage('BDD tests') {
 <p>post/always veröffentlicht den Bericht auch bei fehlgeschlagener Stage. allowEmptyResults kann fehlende Berichte zulassen, aber auch Konfigurationsfehler verdecken. In der Kursvorlage sollen die erwarteten Berichte vorhanden sein.</p>
 </aside></section>
 <section>
-<div class="slide-frame"><header class="slide-heading"><h2>Jenkins: Was bei einem Testfehler passiert</h2></header><div class="slide-body">
+<div class="slide-frame"><header class="slide-heading"><h2>Jenkins · Ein roter Test stoppt die nächste Stage</h2></header><div class="slide-body">
 <ol>
 <li>pytest oder behave beendet den Lauf mit <strong>Exitcode 1</strong>.</li>
 <li class="fragment seminar-step" data-fragment-index="0">Der normale <code>sh</code>-Schritt schlägt fehl; der Build erhält <strong>FAILURE</strong>.</li>
@@ -3842,7 +3807,7 @@ stage('BDD tests') {
 <p>Die vorbereiteten Läufe zeigen: Ein roter Unit-Test führt zu FAILURE, die BDD-Stage wird übersprungen. Unterschreitet die Coverage bei grünen Tests ein Gate, entsteht UNSTABLE. Ein anderes Verhalten bei Testfehlern würde eine ausdrückliche Exitcode-Behandlung erfordern. Die acht geprüften Läufe sind in ci-local/RESULTS.md verlinkt.</p>
 </aside></section>
 <section class="code-slide code-split">
-<div class="slide-frame"><header class="slide-heading"><h2>Jenkins: Coverage prüfen</h2></header><div class="slide-body"><pre><code class="language-groovy">post {
+<div class="slide-frame"><header class="slide-heading"><h2>Jenkins · Eine Coverage-Schwelle prüfen</h2></header><div class="slide-body"><pre><code class="language-groovy">post {
     always {
         archiveArtifacts artifacts: 'reports/**/*.xml',
                          fingerprint: true
@@ -3861,75 +3826,35 @@ stage('BDD tests') {
 <p class="fragment seminar-step" data-fragment-index="1">Unterhalb der Schwelle (<strong>Quality Gate</strong>) wird der Build <strong>UNSTABLE</strong> (gelb). Mit <code>criticality: 'FAILURE'</code> würde er rot.</p>
 
 </div></div><footer class="slide-sources fragment seminar-fade" data-fragment-index="1"><p class="tiny muted">Quelle: <a href="https://www.jenkins.io/doc/pipeline/steps/coverage/">jenkins.io, recordCoverage step</a></p></footer></div>
-<aside class="notes"><p>Planzeit: 52 Minuten (davon Übung/Gespräch: 50 Minuten; bereits enthalten). Tag 2.</p>
-<p>Zwei Minuten für Cobertura und die Gates. Danach Lab 8: 15 Minuten GitLab-Gerüst, zehn Minuten Jenkins-Gerüst, 15 Minuten lokale Prüfung. Beide Vorlagen enthalten je vier Aufgabenstellen. Anschließend zehn Minuten Auswertung mit CI-VERGLEICH.md und den vorbereiteten Serverläufen. Insgesamt sind 50 Minuten Übung und Gespräch in diesem Block enthalten. Ohne laufende Instanz gespeicherte Belege zeigen; die lokale Prüfung allein belegt nicht das Verhalten des CI-Servers.</p>
-</aside></section>
-<section class="table-slide">
-<div class="slide-frame"><header class="slide-heading"><h2>Wiederkehrende Probleme in Tests</h2></header><div class="slide-body">
-<table>
-<thead>
-<tr>
-<th>Bereich</th>
-<th>Beispiele aus xUnit Test Patterns</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Testcode</td>
-<td>Obscure Test, Conditional Test Logic, Test Code Duplication</td>
-</tr>
-<tr class="fragment seminar-fade" data-fragment-index="0">
-<td>Verhalten beim Ausführen</td>
-<td>Assertion Roulette, Erratic Test, Fragile Test, Slow Tests</td>
-</tr>
-<tr class="fragment seminar-fade" data-fragment-index="1">
-<td>Arbeit im Projekt</td>
-<td>Developers Not Writing Tests, High Test Maintenance Cost</td>
-</tr>
-</tbody>
-</table>
-<p class="fragment seminar-step" data-fragment-index="2">Solche Anzeichen werden <strong>Test Smells</strong> genannt. Die Begriffe helfen, ein Problem im Review genauer zu beschreiben.</p>
-
-</div><footer class="slide-sources fragment seminar-fade" data-fragment-index="2"><p class="tiny muted">Quelle: <a href="http://xunitpatterns.com/Test%20Smells.html">Test Smells</a></p></footer></div>
 <aside class="notes"><p>Planzeit: 2 Minuten (davon Übung/Gespräch: 0 Minuten; bereits enthalten). Tag 2.</p>
-<p>Die drei Bereiche unterscheiden: Testcode, Verhalten beim Ausführen und Arbeit im Projekt. Die Begriffe dienen zur Beschreibung; die anschließenden Beispiele zeigen, welche Änderung jeweils helfen kann.</p>
-</aside></section>
-<section class="comparison">
-<div class="slide-frame"><header class="slide-heading"><h2>Probleme im Code und beim Testlauf</h2></header><div class="slide-body">
-<div class="sx-grid">
-<p><strong>Im Testcode</strong></p>
-<ul>
-<li><strong>Obscure Test:</strong> Schwer erkennbar, was der Test prüft</li>
-<li><strong>Conditional Test Logic:</strong> Verzweigungen im Test machen seinen Ablauf unübersichtlich</li>
-<li><strong>Test Code Duplication:</strong> Wiederholter Code erschwert Änderungen</li>
-</ul>
-</div>
-<div class="sx-grid fragment seminar-step" data-fragment-index="0">
-<p><strong>Beim Ausführen</strong></p>
-<ul>
-<li><strong>Assertion Roulette:</strong> Unklar, welche Prüfung fehlgeschlagen ist</li>
-<li><strong>Erratic Test:</strong> Ohne Codeänderung mal grün, mal rot</li>
-<li><strong>Slow Tests:</strong> Zu lange Laufzeit</li>
-<li><strong>Fragile Test:</strong> Scheitert nach einer Änderung, obwohl das geprüfte Verhalten gleich blieb</li>
-</ul>
-</div>
-</div></div>
-<aside class="notes"><p>Planzeit: 4 Minuten (davon Übung/Gespräch: 0 Minuten; bereits enthalten). Tag 2.</p>
-<p>Ein bekanntes Problem aus der eigenen Testsuite zuordnen lassen. Im BDD-Beispiel erleichtern getrennte Then-Steps die Fehlersuche. Verzweigungen in Steps darauf prüfen, ob sie mehrere unterschiedliche Abläufe vermischen.</p>
+<p>Die Schwelle von 60 Prozent ist der gewählte Übungswert, keine allgemeine Qualitätsempfehlung. LINE/PROJECT bewertet die Zeilenüberdeckung des Projekts. Grüne Tests und geringe Coverage können zusammen auftreten. Das Gate bewertet nur die Ausführung von Code, nicht die Qualität der Assertions. Jetzt sind alle Teile für beide CI-Vorlagen erklärt; die Übung folgt auf einer eigenen Folie.</p>
 </aside></section>
 <section>
-<div class="slide-frame"><header class="slide-heading"><h2>Warum Tests nach Änderungen scheitern</h2></header><div class="slide-body">
+<div class="slide-frame"><header class="slide-heading"><h2>Lab 8 · Beide Pipelines prüfen</h2></header><div class="slide-body">
+<ol>
+<li><strong>Lokal:</strong> pytest, behave und Coverage-Berichte erzeugen.</li>
+<li class="fragment seminar-step" data-fragment-index="0"><strong>GitLab:</strong> Testbefehle und Berichtsdateien in der Vorlage ergänzen.</li>
+<li class="fragment seminar-step" data-fragment-index="1"><strong>Jenkins:</strong> Teststufen, JUnit-Auswertung und Coverage-Gate ergänzen.</li>
+<li class="fragment seminar-step" data-fragment-index="2"><strong>Auf dem Server:</strong> grünen Lauf, roten Test und unterschrittenes Gate vergleichen.</li>
+</ol>
+<p class="fragment seminar-step" data-fragment-index="3"><strong>Fertig, wenn:</strong> Sie den Job- beziehungsweise Buildstatus erklären und die zugehörigen Testergebnisse im Bericht finden können.</p>
+</div></div>
+<aside class="notes"><p>Planzeit: 50 Minuten (davon Übung/Gespräch: 50 Minuten; bereits enthalten). Tag 2.</p>
+<p>50 Minuten Übung und Gespräch: 15 Minuten GitLab-Gerüst, zehn Minuten Jenkins-Gerüst, 15 Minuten lokale Prüfung und zehn Minuten Auswertung. Die Vorlagen enthalten jeweils vier Aufgabenstellen. scripts/check_reports.py prüft lokale Berichte. Anschließend CI-VERGLEICH.md und die acht vorbereiteten Serverläufe in ci-local/RESULTS.md verwenden. In Jenkins führt der rote Unit-Test zu FAILURE und überspringt die BDD-Stage; ein unterschrittenes Coverage-Gate bei grünen Tests erzeugt UNSTABLE. Falls kein Server erreichbar ist, die gespeicherten Belege zeigen; ein lokaler Testlauf ersetzt diese Prüfung nicht.</p>
+</aside></section>
+<section>
+<div class="slide-frame"><header class="slide-heading"><h2>Nicht jedes Szenario braucht das Gesamtsystem</h2></header><div class="slide-body">
+<p>Die Rabatt- und Coupon-Szenarien prüfen die <strong>Fachlogik direkt</strong>. Sie brauchen dafür keinen Browser und keinen Webserver.</p>
 <ul>
-<li><strong>Interface Sensitivity:</strong> Eine verwendete Schnittstelle hat sich geändert.</li>
-<li class="fragment seminar-step" data-fragment-index="0"><strong>Behavior Sensitivity:</strong> Eine Verhaltensänderung betrifft Tests, die damit nichts zu tun haben sollten.</li>
-<li class="fragment seminar-step" data-fragment-index="1"><strong>Data Sensitivity:</strong> Testdaten wurden verändert.</li>
-<li class="fragment seminar-step" data-fragment-index="2"><strong>Context Sensitivity:</strong> Die Umgebung oder ihr Zustand hat sich verändert.</li>
+<li class="fragment seminar-step" data-fragment-index="0"><strong>Unit-Tests</strong> prüfen viele Varianten und Grenzfälle schnell.</li>
+<li class="fragment seminar-step" data-fragment-index="1"><strong>Integrationstests</strong> prüfen das Zusammenspiel, etwa Speichern und Lesen mit SQLite.</li>
+<li class="fragment seminar-step" data-fragment-index="2"><strong>End-to-End-Tests</strong> prüfen wichtige Nutzerabläufe durch das gesamte System.</li>
 </ul>
-<p class="fragment seminar-step" data-fragment-index="3"><strong>Overspecified Software</strong> ist ein Beispiel für zu starke Kopplung: Der Test schreibt interne Abläufe vor und scheitert, sobald diese umgebaut werden.</p>
+<p class="fragment seminar-step" data-fragment-index="3"><strong>Akzeptanztest bezeichnet den Zweck, nicht die technische Ebene.</strong> Wählen Sie die kleinste Ebene, die den betreffenden Fehler zuverlässig finden kann.</p>
 
-</div><footer class="slide-sources fragment seminar-fade" data-fragment-index="3"><p class="tiny muted">Quelle: <a href="http://xunitpatterns.com/Fragile%20Test.html">Fragile Tests</a></p></footer></div>
-<aside class="notes"><p>Planzeit: 3 Minuten (davon Übung/Gespräch: 0 Minuten; bereits enthalten). Tag 2.</p>
-<p>Bei einem fragilen Test zuerst prüfen, ob er überhaupt startet. Dann Änderungen an Schnittstelle, Verhalten, Daten und Umgebung untersuchen. Bei unnötigen Prüfungen interner Abläufe zurück zur öffentlichen Schnittstelle gehen.</p>
+</div><footer class="slide-sources fragment seminar-fade" data-fragment-index="3"><p class="tiny muted">Quelle: <a href="https://martinfowler.com/bliki/TestPyramid.html">Testpyramide</a>, <a href="https://martinfowler.com/articles/practical-test-pyramid.html">Testpyramide in der Praxis</a></p></footer></div>
+<aside class="notes"><p>Planzeit: 6 Minuten (davon Übung/Gespräch: 0 Minuten; bereits enthalten). Tag 2.</p>
+<p>Nach der CI-Übung den Blick auf die Testauswahl lenken: Mehr automatisch gestartete Tests sind nicht automatisch bessere Absicherung. Die Rabattfälle unterscheiden sich von einem vollständigen Checkout mit Oberfläche, Backend und Datenbank. Wichtige Nutzerabläufe brauchen zusätzlich End-to-End-Tests, Varianten bleiben möglichst auf kleineren Ebenen. Findet ein End-to-End-Test einen Fehler, versuchen wir ihn durch einen kleineren Test zu reproduzieren. Für die Verteilung gibt es keine allgemeingültigen Prozentanteile.</p>
 </aside></section>
 <section class="code-slide code-split-wide">
 <div class="slide-frame"><header class="slide-heading"><h2>Verhalten statt Implementierung</h2></header><div class="slide-body"><pre><code class="language-python"># Vorher
@@ -3972,46 +3897,99 @@ verify_in_order:
 <aside class="notes"><p>Planzeit: 3 Minuten (davon Übung/Gespräch: 0 Minuten; bereits enthalten). Tag 2.</p>
 <p>Nach Tests suchen, bei denen eine Codeänderung immer dieselbe mechanische Änderung an der Erwartung verlangt. Gemeinsam formulieren, welche unabhängige fachliche Aussage stattdessen geprüft werden könnte.</p>
 </aside></section>
-<section class="comparison">
-<div class="slide-frame"><header class="slide-heading"><h2>Zwölf Eigenschaften guter Tests</h2></header><div class="slide-body">
-<div class="sx-grid">
-<ul>
-<li><strong>isolated:</strong> unabhängig von anderen Tests</li>
-<li><strong>composable:</strong> getrennte Teilprüfungen lassen sich kombinieren</li>
-<li><strong>deterministic:</strong> bei gleichen Bedingungen gleiches Ergebnis</li>
-<li><strong>fast:</strong> schnelle Rückmeldung</li>
-<li><strong>writable:</strong> mit vertretbarem Aufwand schreibbar</li>
-<li><strong>readable:</strong> leicht verständlich</li>
-</ul>
-</div>
-<div class="sx-grid fragment seminar-step" data-fragment-index="0">
-<ul>
-<li><strong>behavioral:</strong> prüft beobachtbares Verhalten</li>
-<li><strong>structure-insensitive:</strong> verträgt interne Umbauten</li>
-<li><strong>automated:</strong> läuft ohne manuelle Eingriffe</li>
-<li><strong>specific:</strong> grenzt die Fehlerursache ein</li>
-<li><strong>predictive:</strong> gibt Vertrauen in den Produktivbetrieb</li>
-<li><strong>inspiring:</strong> ermutigt zu Änderungen am Code</li>
-</ul>
-</div>
+<section class="table-slide">
+<div class="slide-frame"><header class="slide-heading"><h2>Fragile Tests: unnötige Abhängigkeiten erkennen</h2></header><div class="slide-body">
+<p>Ein <strong>Fragile Test</strong> scheitert nach einer Änderung, obwohl das Verhalten, das er absichern soll, weiterhin stimmt.</p>
+<table>
+<thead>
+<tr>
+<th>Abhängigkeit</th>
+<th>Typischer Anlass</th>
+</tr>
+</thead>
+<tbody>
+<tr class="fragment seminar-fade" data-fragment-index="0">
+<td>Schnittstelle (<strong>Interface Sensitivity</strong>)</td>
+<td>viele Tests hängen an einem internen Helfer</td>
+</tr>
+<tr class="fragment seminar-fade" data-fragment-index="1">
+<td>Verhalten (<strong>Behavior Sensitivity</strong>)</td>
+<td>eine Änderung trifft fachlich unbeteiligte Tests</td>
+</tr>
+<tr class="fragment seminar-fade" data-fragment-index="2">
+<td>Daten (<strong>Data Sensitivity</strong>)</td>
+<td>gemeinsam verwendete Testdaten ändern sich</td>
+</tr>
+<tr class="fragment seminar-fade" data-fragment-index="3">
+<td>Umgebung (<strong>Context Sensitivity</strong>)</td>
+<td>Datum, Zustand oder Konfiguration ändern sich</td>
+</tr>
+</tbody>
+</table>
+<p class="fragment seminar-step" data-fragment-index="4">Prüfen Sie zuerst: <strong>Hat sich die Anforderung geändert, oder nur etwas, wovon der Test unnötig abhängt?</strong></p>
 
-</div><footer class="slide-sources fragment seminar-fade" data-fragment-index="0"><p class="tiny muted"><a href="https://testdesiderata.com/">Eigenschaften guter Tests</a></p></footer></div>
+</div><footer class="slide-sources fragment seminar-fade" data-fragment-index="4"><p class="tiny muted">Quelle: <a href="http://xunitpatterns.com/Fragile%20Test.html">xUnit Test Patterns · Fragile Test</a></p></footer></div>
 <aside class="notes"><p>Planzeit: 3 Minuten (davon Übung/Gespräch: 0 Minuten; bereits enthalten). Tag 2.</p>
-<p>Behavioral und structure-insensitive am Refactoring-Beispiel erklären. Predictive beschreibt den Anspruch, dass grüne Tests Vertrauen in den Produktionsbetrieb geben. Er ist ein Ziel für die Testauswahl und kein Beweis für Fehlerfreiheit.</p>
+<p>Ein roter Test nach einer beabsichtigten Verhaltensänderung kann richtig sein. Fragilität liegt bei einer unnötigen Abhängigkeit vor. Die beiden vorangehenden Beispiele zeigen interne Struktur und Aufrufreihenfolge. Overspecified Software bezeichnet Tests, die zu viel von der Implementierung vorschreiben. Beim Datum an die feste Uhr aus Teil II erinnern; bei gemeinsamen Daten an eine frische Fixture pro Szenario.</p>
+</aside></section>
+<section class="table-slide">
+<div class="slide-frame"><header class="slide-heading"><h2>Test Smells: vom Symptom zur Verbesserung</h2></header><div class="slide-body">
+<p><strong>Test Smells</strong> sind wiederkehrende Anzeichen für Probleme in Tests.</p>
+<table>
+<thead>
+<tr>
+<th>Beobachtung</th>
+<th>Fachbegriff</th>
+<th>Ansatz</th>
+</tr>
+</thead>
+<tbody>
+<tr class="fragment seminar-fade" data-fragment-index="0">
+<td>Die geprüfte Regel ist unklar</td>
+<td><strong>Obscure Test</strong></td>
+<td>Fall und Erwartung deutlicher benennen</td>
+</tr>
+<tr class="fragment seminar-fade" data-fragment-index="0">
+<td>Die Fehlerursache bleibt unklar</td>
+<td><strong>Assertion Roulette</strong></td>
+<td>Prüfungen eindeutig zuordnen</td>
+</tr>
+<tr class="fragment seminar-fade" data-fragment-index="1">
+<td>Ohne Codeänderung mal rot, mal grün</td>
+<td><strong>Erratic Test</strong></td>
+<td>Uhr, Daten und Zustand kontrollieren</td>
+</tr>
+<tr class="fragment seminar-fade" data-fragment-index="2">
+<td>Interner Umbau macht den Test rot</td>
+<td><strong>Fragile Test</strong></td>
+<td>beobachtbares Verhalten prüfen</td>
+</tr>
+<tr class="fragment seminar-fade" data-fragment-index="3">
+<td>Die Rückmeldung dauert zu lange</td>
+<td><strong>Slow Tests</strong></td>
+<td>Ursache messen und Testebene prüfen</td>
+</tr>
+</tbody>
+</table>
+<p class="fragment seminar-step" data-fragment-index="4">Suchen Sie zu einem Befund die konkrete Abhängigkeit oder unklare Stelle im Test.</p>
+
+</div><footer class="slide-sources fragment seminar-fade" data-fragment-index="4"><p class="tiny muted">Quelle: <a href="http://xunitpatterns.com/Test%20Smells.html">xUnit Test Patterns · Test Smells</a></p></footer></div>
+<aside class="notes"><p>Planzeit: 6 Minuten (davon Übung/Gespräch: 0 Minuten; bereits enthalten). Tag 2.</p>
+<p>Die Begriffe nach den konkreten Beispielen einführen. Weitere Code Smells sind Conditional Test Logic (Verzweigungen im Test) und Test Code Duplication (wiederholter Testcode). Auf Projektebene können Developers Not Writing Tests und High Test Maintenance Cost sichtbar werden. Die Namen helfen beim Benennen; sie ersetzen die Untersuchung des konkreten Tests nicht. Bei Assertions geht es um diagnostische Klarheit, nicht um ein pauschales Verbot mehrerer Assertions. BDD-Schritte auf versteckte Verzweigungen und eigene Geschäftslogik prüfen.</p>
 </aside></section>
 <section>
-<div class="slide-frame"><header class="slide-heading"><h2>Wie viele End-to-End-Tests brauchen wir?</h2></header><div class="slide-body">
+<div class="slide-frame"><header class="slide-heading"><h2>Gute Tests geben verlässliche Rückmeldung</h2></header><div class="slide-body">
 <ul>
-<li>Prüfen Sie wichtige Nutzerabläufe durch das <strong>Gesamtsystem</strong>.</li>
-<li class="fragment seminar-step" data-fragment-index="0">Decken Sie Varianten und Randfälle möglichst mit <strong>Unit- oder Integrationstests</strong> ab.</li>
-<li class="fragment seminar-step" data-fragment-index="1">Findet ein End-to-End-Test einen Fehler, versuchen Sie ihn mit einem kleineren Test zu reproduzieren.</li>
-<li class="fragment seminar-step" data-fragment-index="2">Ein <strong>Akzeptanztest</strong> kann die Fachlogik direkt prüfen. Er muss nicht durch die Oberfläche laufen.</li>
+<li><strong>Isolated und deterministic:</strong> unabhängig von anderen Tests; unter gleichen Bedingungen mit gleichem Ergebnis.</li>
+<li class="fragment seminar-step" data-fragment-index="0"><strong>Fast und automated:</strong> schnell genug für häufige, automatische Läufe.</li>
+<li class="fragment seminar-step" data-fragment-index="1"><strong>Readable und specific:</strong> der Fall ist verständlich, ein Fehler lässt sich eingrenzen.</li>
+<li class="fragment seminar-step" data-fragment-index="2"><strong>Behavioral und structure-insensitive:</strong> die Erwartung beschreibt Verhalten und bleibt bei internen Umbauten gültig.</li>
 </ul>
-<p class="fragment seminar-step" data-fragment-index="3">Für die Testebenen gibt es keine allgemein gültigen Prozentanteile.</p>
+<p class="fragment seminar-step" data-fragment-index="3">Die entscheidende Frage im Review: <strong>Hilft dieser Test, einen relevanten Fehler zu erkennen und zu verstehen?</strong></p>
 
-</div><footer class="slide-sources fragment seminar-fade" data-fragment-index="3"><p class="tiny muted">Quelle: <a href="https://martinfowler.com/bliki/TestPyramid.html">Testpyramide</a>; <a href="https://martinfowler.com/articles/practical-test-pyramid.html">Testpyramide in der Praxis</a></p></footer></div>
-<aside class="notes"><p>Planzeit: 6 Minuten (davon Übung/Gespräch: 0 Minuten; bereits enthalten). Tag 2.</p>
-<p>Die Kurs-Szenarien rufen die Fachlogik direkt auf und benötigen keinen Browser. Für ein eigenes System besprechen, welche wenigen Abläufe zusätzlich durch die Oberfläche geprüft werden müssen.</p>
+</div><footer class="slide-sources fragment seminar-fade" data-fragment-index="3"><p class="tiny muted">Quelle: <a href="https://testdesiderata.com/">Eigenschaften guter Tests</a></p></footer></div>
+<aside class="notes"><p>Planzeit: 3 Minuten (davon Übung/Gespräch: 0 Minuten; bereits enthalten). Tag 2.</p>
+<p>Diese Eigenschaften bündeln die bisher gezeigten Verbesserungen. Der vollständige Katalog der zwölf Test Desiderata umfasst zusätzlich composable, writable, predictive und inspiring. Composable: getrennte Teilprüfungen lassen sich kombinieren. Writable: mit vertretbarem Aufwand schreibbar. Predictive: schafft Vertrauen für den Produktivbetrieb. Inspiring: ermutigt zu Änderungen. Die Eigenschaften können in Spannung stehen; sie sind Gesprächsgrundlage, keine mechanische Checkliste.</p>
 </aside></section>
 <section>
 <div class="slide-frame"><header class="slide-heading"><h2>Eigene Tests prüfen</h2></header><div class="slide-body">
@@ -4066,6 +4044,19 @@ verify_in_order:
 <p>Die erledigten Aufgaben anhand der Tabelle durchgehen. Nachfragen, welche Technik jetzt sicherer angewendet werden kann und wo noch Übung nötig ist.</p>
 </aside></section>
 <section>
+<div class="slide-frame"><header class="slide-heading"><h2>Ausblick: Über einzelne Testfälle hinaus</h2></header><div class="slide-body">
+<ul>
+<li>Tests prüfen ausgewählte <strong>Beispiele</strong>. Auch eine grüne Suite beweist nicht, dass alle möglichen Fälle funktionieren.</li>
+<li class="fragment seminar-step" data-fragment-index="0"><strong>Eigenschaftsbasiertes Testen</strong> mit Hypothesis prüft eine formulierte Eigenschaft an vielen automatisch gewählten Eingaben.</li>
+<li class="fragment seminar-step" data-fragment-index="1"><strong>Formale Verifikation</strong> prüft mathematisch formulierte Aussagen über Programme, etwa mit Beweisassistenten oder SMT-Solvern.</li>
+<li class="fragment seminar-step" data-fragment-index="2">Gherkin hat eine feste Struktur; die konkrete Bedeutung der Schritte steckt im Step-Code. In diesem Sinn verwenden wir hier den Begriff <strong>halbformale Spezifikation</strong>.</li>
+</ul>
+
+</div><footer class="slide-sources fragment seminar-fade" data-fragment-index="2"><p class="tiny muted">Quelle: <a href="https://testdesiderata.com/">Eigenschaften guter Tests</a>; <a href="https://hypothesis.readthedocs.io/en/latest/">hypothesis.readthedocs.io</a></p></footer></div>
+<aside class="notes"><p>Vertiefung ohne separat eingeplantes Zeitfenster. Planzeit: 0 Minuten (davon Übung/Gespräch: 0 Minuten; bereits enthalten). Tag 2.</p>
+<p>Optionaler Ausblick. Hypothesis wählt Eingaben aus einem beschriebenen Bereich und sucht dabei auch nach Grenzfällen. Beweisassistenten und SMT-Solver verfolgen andere Verfahren als Beispieltests. Die Bezeichnung von Gherkin als halbformal ist eine Einordnung des Trainers. Die genannten Beweiswerkzeuge gehören zu seinem Arbeitsgebiet, nicht zu den Übungen dieses Seminars.</p>
+</aside></section>
+<section>
 <div class="slide-frame"><header class="slide-heading"><h2>Der nächste Schritt in Ihrem Projekt</h2></header><div class="slide-body">
 <p>Wählen Sie eine Aufgabe, die Sie in der kommenden Woche bearbeiten können:</p>
 <ul>
@@ -4078,19 +4069,6 @@ verify_in_order:
 </div></div>
 <aside class="notes"><p>Planzeit: 13 Minuten (davon Übung/Gespräch: 13 Minuten; bereits enthalten). Tag 2.</p>
 <p>13 Minuten für eine konkrete Aufgabe am eigenen Projekt. Die zuvor notierte Geschäftsregel oder Funktion wieder aufgreifen. Am Ende sollen betroffener Code, geplanter Schritt und ein prüfbares Ergebnis feststehen.</p>
-</aside></section>
-<section>
-<div class="slide-frame"><header class="slide-heading"><h2>Ausblick: Über einzelne Testfälle hinaus</h2></header><div class="slide-body">
-<ul>
-<li>Tests prüfen ausgewählte <strong>Beispiele</strong>. Auch eine grüne Suite beweist nicht, dass alle möglichen Fälle funktionieren.</li>
-<li class="fragment seminar-step" data-fragment-index="0"><strong>Eigenschaftsbasiertes Testen</strong> mit Hypothesis prüft eine formulierte Eigenschaft an vielen automatisch gewählten Eingaben.</li>
-<li class="fragment seminar-step" data-fragment-index="1"><strong>Formale Verifikation</strong> prüft mathematisch formulierte Aussagen über Programme, etwa mit Beweisassistenten oder SMT-Solvern.</li>
-<li class="fragment seminar-step" data-fragment-index="2">Gherkin hat eine feste Struktur; die konkrete Bedeutung der Schritte steckt im Step-Code. In diesem Sinn verwenden wir hier den Begriff <strong>halbformale Spezifikation</strong>.</li>
-</ul>
-
-</div><footer class="slide-sources fragment seminar-fade" data-fragment-index="2"><p class="tiny muted">Quelle: <a href="https://testdesiderata.com/">Eigenschaften guter Tests</a>; <a href="https://hypothesis.readthedocs.io/en/latest/">hypothesis.readthedocs.io</a></p></footer></div>
-<aside class="notes"><p>Vertiefung ohne separat eingeplantes Zeitfenster. Planzeit: 0 Minuten (davon Übung/Gespräch: 0 Minuten; bereits enthalten). Tag 2.</p>
-<p>Optionaler Ausblick. Hypothesis wählt Eingaben aus einem beschriebenen Bereich und sucht dabei auch nach Grenzfällen. Beweisassistenten und SMT-Solver verfolgen andere Verfahren als Beispieltests. Die Bezeichnung von Gherkin als halbformal ist eine Einordnung des Trainers. Die genannten Beweiswerkzeuge gehören zu seinem Arbeitsgebiet, nicht zu den Übungen dieses Seminars.</p>
 </aside></section>
 <section>
 <div class="slide-frame"><header class="slide-heading"><h2>Nach dem Seminar weiterlernen</h2></header><div class="slide-body">
