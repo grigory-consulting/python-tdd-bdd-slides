@@ -2,7 +2,7 @@
 
 Dr.-Ing. Grigory Devadze
 
-142 Folien für das zweitägige Seminar mit Python, pytest, unittest, Gherkin, behave, GitLab und Jenkins.
+141 Folien für das zweitägige Seminar mit Python, pytest, unittest, Gherkin, behave, GitLab und Jenkins.
 
 ## Präsentation öffnen
 
