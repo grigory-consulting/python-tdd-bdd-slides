@@ -29,6 +29,10 @@ Das Repository herunterladen und **`index.html` im Browser öffnen**. Die Datei 
 
 - [Versandkosten nach Warenwert](solutions/versandkosten/) – kostenloser Versand ab 50 Euro, mit Unit-Tests, Scenario Outline und gemeinsamen behave-Steps.
 
+## Jenkins-Beispiel
+
+- [Versandkosten mit Jenkins testen](examples/jenkins/) – eigenständiges Beispiel mit GitHub-Checkout, Unit-Tests, BDD-Szenarien und JUnit-Berichten.
+
 ## Drittanbieter
 
 Reveal.js, highlight.js und die eingebetteten Schriften werden unter ihren jeweiligen Lizenzen verwendet. Siehe [THIRD_PARTY_NOTICES.txt](THIRD_PARTY_NOTICES.txt).

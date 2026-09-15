@@ -1,0 +1,54 @@
+pipeline {
+    agent {
+        docker {
+            image 'python:3.12-slim'
+        }
+    }
+
+    stages {
+        stage('Installation') {
+            steps {
+                dir('examples/jenkins') {
+                    dir('reports') {
+                        deleteDir()
+                    }
+                    sh 'python -m venv --clear .venv'
+                    sh '.venv/bin/python -m pip install -r requirements.txt'
+                }
+            }
+        }
+
+        stage('Unit-Tests') {
+            steps {
+                dir('examples/jenkins') {
+                    sh '.venv/bin/python -m pytest -q --junitxml=reports/pytest.xml'
+                }
+            }
+            post {
+                always {
+                    junit 'examples/jenkins/reports/pytest.xml'
+                }
+            }
+        }
+
+        stage('BDD-Tests') {
+            steps {
+                dir('examples/jenkins') {
+                    sh '.venv/bin/python -m behave --junit --junit-directory reports/behave'
+                }
+            }
+            post {
+                always {
+                    junit 'examples/jenkins/reports/behave/*.xml'
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            archiveArtifacts artifacts: 'examples/jenkins/reports/**/*.xml',
+                             allowEmptyArchive: true
+        }
+    }
+}
