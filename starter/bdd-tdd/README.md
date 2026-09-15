@@ -2,6 +2,8 @@
 
 Startprojekt für die Coupon-Übung: Shop-Code und 79 bestehende pytest-Tests. Die Rabattregeln sind bereits umgesetzt. Die Coupon-Regel, Gherkin-Szenarien und Step-Definitionen entstehen während der Übung.
 
+Die [Lösungsdateien für die behave-Anbindung](solution/) enthalten `environment.py` und `rabatt_steps.py` zum Nachschlagen oder Übernehmen.
+
 ## 1. Projekt öffnen
 
 Das Repository klonen oder auf GitHub über **Code → Download ZIP** herunterladen und entpacken. Im Terminal in diesen Ordner wechseln:
@@ -47,7 +49,7 @@ Unter Windows `.venv/bin/python` durch `.\.venv\Scripts\python.exe` ersetzen.
 ## 4. In der Übung weiterarbeiten
 
 1. Die Coupon-Regel gemeinsam klären und die bestätigten Beispiele in `DISCOVERY.md` festhalten.
-2. Mit den bekannten Rabattfällen den Runner einrichten: `features/rabatt.feature`, `features/steps/rabatt_steps.py` und `features/environment.py` erstellen; `behave.ini` ergänzen.
+2. Mit den bekannten Rabattfällen den Runner einrichten: `features/rabatt.feature`, `features/steps/rabatt_steps.py` und `features/environment.py` erstellen; `behave.ini` ergänzen. Hooks und Steps können aus [`solution/`](solution/) übernommen werden.
 3. Das erste neue Beispiel in `features/coupon.feature` aufnehmen. Das Szenario soll am falschen Zahlbetrag scheitern. Fehlende Steps und Importfehler zuerst beheben.
 4. Einen passenden Unit-Test in `tests/test_coupon.py` schreiben und rot sehen. Die Regel implementieren, bis Unit-Test und Szenario grün sind.
 5. Weitere bestätigte Fälle ergänzen und anschließend refaktorieren. Die beobachteten roten und grünen Zustände in `BDD_LOG.md` festhalten.

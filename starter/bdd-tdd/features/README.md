@@ -7,4 +7,6 @@ Die Dateien entstehen im Verlauf der [Übung](../README.md):
 - `environment.py`: Importpfad auf Modulebene einrichten und den Kontext je Szenario vorbereiten.
 - `coupon.feature`: die neue Regel aus dem fachlichen Gespräch.
 
+Hooks und Step-Definitionen liegen als [Lösungsdateien](../solution/) bereit.
+
 behave aus dem Projektordner starten, eine Ebene oberhalb von `features/`.
