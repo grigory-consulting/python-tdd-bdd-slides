@@ -25,6 +25,10 @@ Das Repository herunterladen und **`index.html` im Browser öffnen**. Die Datei 
 - [Eine neue Regel mit BDD und TDD entwickeln](starter/bdd-tdd/) – Startprojekt mit 79 Tests, vorbereitetem Feature-Ordner und einer Anleitung zur Einrichtung.
 - [Tests und Berichte in CI ausführen](starter/ci/) – Startprojekt mit 88 Tests, BDD-Szenarien und Pipeline-Vorlagen; GitLab, Runner und Jenkins lassen sich mit Docker Compose auf der Schulungsinstanz einrichten und prüfen.
 
+## Eigenständige Lösungen
+
+- [Versandkosten nach Warenwert](solutions/versandkosten/) – kostenloser Versand ab 50 Euro, mit Unit-Tests, Scenario Outline und gemeinsamen behave-Steps.
+
 ## Drittanbieter
 
 Reveal.js, highlight.js und die eingebetteten Schriften werden unter ihren jeweiligen Lizenzen verwendet. Siehe [THIRD_PARTY_NOTICES.txt](THIRD_PARTY_NOTICES.txt).
