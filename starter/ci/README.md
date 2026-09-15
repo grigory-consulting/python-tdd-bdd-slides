@@ -2,6 +2,8 @@
 
 Startprojekt für die CI-Übung: Shop-Code, 88 pytest-Tests, 10 ausführbare behave-Szenarien und ein mit `@wip` markiertes Szenario. Die Vorlagen für GitLab und Jenkins enthalten jeweils vier Platzhalter, die während der Übung ergänzt werden.
 
+Die [fertige Lösung für beide Pipelines](solution/) liegt separat bereit, einschließlich Befehlen zum Übernehmen und Starten.
+
 ## 1. Projekt öffnen
 
 Das Repository klonen oder auf GitHub über **Code → Download ZIP** herunterladen und entpacken. Im Terminal in diesen Ordner wechseln:

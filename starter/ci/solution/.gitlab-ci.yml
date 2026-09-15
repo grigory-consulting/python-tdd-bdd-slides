@@ -1,0 +1,35 @@
+# Lösung: pytest, behave und ihre Berichte in GitLab CI ausführen.
+default:
+  image: python:3.12
+  before_script:
+    - python -m pip install --upgrade pip
+    - pip install -r requirements.txt
+
+stages:
+  - test
+
+pytest:
+  stage: test
+  script:
+    - python -m pytest --junitxml=reports/pytest.xml --cov=shop --cov-branch --cov-report=term-missing --cov-report=xml:reports/coverage.xml
+  coverage: '/TOTAL.*? (100(?:\.0+)?\%|[1-9]?\d(?:\.\d+)?\%)$/'
+  artifacts:
+    when: always
+    paths:
+      - reports/
+    reports:
+      junit: reports/pytest.xml
+      coverage_report:
+        coverage_format: cobertura
+        path: reports/coverage.xml
+
+behave:
+  stage: test
+  script:
+    - python -m behave --tags="not @wip" --junit --junit-directory reports/behave
+  artifacts:
+    when: always
+    paths:
+      - reports/behave/
+    reports:
+      junit: reports/behave/*.xml

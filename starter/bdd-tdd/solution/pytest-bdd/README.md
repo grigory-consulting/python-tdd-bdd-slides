@@ -32,15 +32,18 @@ python3.12 -m venv .venv
 
 Erwartet: **5 BDD-Tests**, **88 pytest-Tests insgesamt** und **5 bestandene behave-Szenarien**.
 
-Mit den festgelegten Versionen meldet pytest-bdd 36 Deprecation-Warnungen zur pytest-Fixture-API. Die Tests bestehen; die Warnungen bleiben sichtbar.
+Mit den festgelegten Versionen meldet pytest-bdd Deprecation-Warnungen zur pytest-Fixture-API. Die Tests bestehen; die Warnungen bleiben sichtbar.
 
 ## Die Bindungen vergleichen
 
 - [`features/rabatt.feature`](features/rabatt.feature) und [`features/coupon.feature`](features/coupon.feature): gemeinsame Szenarien für beide Werkzeuge.
-- [`tests/test_rabatt_bdd.py`](tests/test_rabatt_bdd.py): `scenarios()` bindet die Szenarien an pytest. Given-Steps stellen Werte über `target_fixture` bereit; der When-Step ruft die Anwendung auf, die Then-Steps prüfen das Ergebnis.
+- [`tests/test_rabatt_bdd.py`](tests/test_rabatt_bdd.py): enthält nur den Import und `scenarios(...)`, um beide Feature-Dateien an pytest zu binden.
+- [`tests/conftest.py`](tests/conftest.py): gemeinsame Given-/When-/Then-Funktionen für alle BDD-Testdateien unter `tests/`. Given-Steps stellen Werte über `target_fixture` bereit; der When-Step ruft die Anwendung auf, die Then-Steps enthalten die Assertions.
 - [`features/steps/rabatt_steps.py`](features/steps/rabatt_steps.py): dieselben Schritte mit behave und `context`.
 - [`src/shop/discount.py`](src/shop/discount.py): gemeinsame Rabatt- und Coupon-Berechnung.
 
 Die Fixture `coupon()` liefert standardmäßig `None`. Nennt ein Szenario einen Coupon, ersetzt dessen Given-Step diesen Wert. So funktionieren Szenarien mit und ohne Coupon mit derselben When-Funktion.
 
-Wer schon die fertige Coupon-Übung besitzt, kann nur `tests/test_rabatt_bdd.py` in deren `tests/`-Ordner übernehmen und `pytest-bdd==8.1.0` installieren. Voraussetzung sind beide Feature-Dateien und die fertige Funktion `payable_total(..., coupon=...)`.
+Neue Szenarien mit bekannten Schritten verwenden diese gemeinsamen Definitionen automatisch. In einer weiteren BDD-Testdatei genügt wieder `scenarios(...)` mit der gewünschten Feature-Datei.
+
+Wer schon die fertige Coupon-Übung besitzt, übernimmt `tests/test_rabatt_bdd.py` und ergänzt die BDD-Imports und den Abschnitt „Gemeinsame BDD-Steps“ aus `tests/conftest.py` in seiner vorhandenen `conftest.py`. Die bisherigen Fixtures bleiben erhalten. Dazu `pytest-bdd==8.1.0` installieren. Voraussetzung sind beide Feature-Dateien und die fertige Funktion `payable_total(..., coupon=...)`.
