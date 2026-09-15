@@ -18,3 +18,7 @@ Die Gherkin-Szenarien unter `features/` im Starter ergänzen und behave aus dem 
 ```
 
 Unter macOS/Linux: `.venv/bin/python -m behave`.
+
+## Optional: dieselben Szenarien mit pytest-bdd
+
+Die [vollständige pytest-bdd-Lösung](pytest-bdd/) enthält die fertige Coupon-Regel, beide Feature-Dateien und beide Step-Bindungen. Sie lässt sich direkt aus ihrem eigenen Ordner ausführen: 88 pytest-Tests und fünf behave-Szenarien.

@@ -1,0 +1,6 @@
+# Geprüft mit Python 3.12
+pytest==9.1.1
+pytest-cov==7.1.0
+approvaltests==19.1.1
+behave==1.3.3
+pytest-bdd==8.1.0

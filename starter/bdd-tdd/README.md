@@ -4,6 +4,8 @@ Startprojekt für die Coupon-Übung: Shop-Code und 79 bestehende pytest-Tests. D
 
 Die [Lösungsdateien für die behave-Anbindung](solution/) enthalten `environment.py` und `rabatt_steps.py` zum Nachschlagen oder Übernehmen.
 
+Für den optionalen Vergleich gibt es eine [ausführbare Lösung mit pytest-bdd](solution/pytest-bdd/).
+
 ## 1. Projekt öffnen
 
 Das Repository klonen oder auf GitHub über **Code → Download ZIP** herunterladen und entpacken. Im Terminal in diesen Ordner wechseln:
